@@ -1,0 +1,85 @@
+@charset "utf-8";
+
+@-ms-viewport { width: device-width; }
+@viewport { width: device-width; }
+/* --------------------------------------------------------
+Style Sheet for TVZBook
+
+author: Matija Buriša
+email: mburisa@tvz.hr
+website: TVZBook
+----------------------------------------------------------*/
+@import 'font-awesome.min.css';
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700,300&subset=latin,latin-ext);
+
+/**
+*   reset
+*/
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+.clear{ clear: both; }
+
+::selection {
+    background: rgba(255, 255, 255, .5);
+}
+::-moz-selection {
+    background: rgba(255, 255, 255, .5);
+}
+-webkit-selection{
+    background: rgba(255, 255, 255, .5);
+}
+
+img::selection {
+    background: 0 0;
+}
+
+img::-moz-selection {
+    background: 0 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+/**
+*   font size
+*/
+body, h1, h2, h3, h4, h5, h6 {
+    font-size-adjust: 0.5;
+}
+
+h1 { font-size: 2em; line-height: 1.25; }
+h2 { font-size: 1.625em; line-height: 1.15384615; }
+h3 { font-size: 1.375em; line-height: 1.13636364; }
+h4 { font-size: 1.125em; line-height: 1.11111111; }
+blockquote { font-size: 1.25em; line-height: 1.25; }
+
+@media (min-width: 43.75em) {
+    h1 { font-size: 2.5em; line-height: 1.125; }
+    h2 { font-size: 2em; line-height: 1.25; }
+    h3 { font-size: 1.5em; line-height: 1.25; }
+    h4 { line-height: 1.22222222; }
+    blockquote { font-size: 1.5em; line-height: 1.45833333; }
+}
+
+@media (min-width: 56.25em) {
+    h1 { font-size: 3em; line-height: 1.05; }
+    h2 { font-size: 2.25em; line-height: 1.25; }
+    h3 { font-size: 1.75em; line-height: 1.25; }
+}
