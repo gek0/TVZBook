@@ -12,6 +12,9 @@ echo '
     <link rel="shortcut icon" href="favicon.png" >
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="js/sweetalert.min.js"></script>
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="css/base.css">
 	<link rel="stylesheet" href="css/layout.css">

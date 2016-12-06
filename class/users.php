@@ -122,7 +122,6 @@ class users
      */
     public function register($ip, $full_name, $username, $password, $password_again, $email, $phone_number)
     {
-
     	$ip = htmlspecialchars($ip, ENT_QUOTES, "UTF-8");
     	$full_name = htmlspecialchars($full_name, ENT_QUOTES, "UTF-8");
         $username = htmlspecialchars($username, ENT_QUOTES, "UTF-8");		
@@ -151,6 +150,56 @@ class users
             die($ex->getMessage());
         }
     }
+
+    /**
+     * @param $ip
+     * @param $full_name
+     * @param $password
+     * @param $password_again
+     * @param $email
+     * @param $phone_number
+     * @param $avatar
+     * edit user settings
+     */
+    public function update_settings($ip, $full_name, $password, $password_again, $email, $phone_number, $avatar)
+    {
+        $ip = htmlspecialchars($ip, ENT_QUOTES, "UTF-8");
+        $full_name = htmlspecialchars($full_name, ENT_QUOTES, "UTF-8");        
+        $email = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
+        $phone_number = htmlspecialchars($phone_number, ENT_QUOTES, "UTF-8");
+
+        if($password == "-"){
+            $query = $this->db->prepare("UPDATE `users` SET `avatar` = :avatar, `full_name` = :full_name, `phone_number` = :phone_number, 
+                                        `email` = :email,`ip` = :ip WHERE `id` = :id");
+            $query->bindParam(":avatar", $avatar, PDO::PARAM_STR);
+            $query->bindParam(":full_name", $full_name, PDO::PARAM_STR);
+            $query->bindParam(":phone_number", $phone_number, PDO::PARAM_STR);
+            $query->bindParam(":email", $email, PDO::PARAM_STR);
+            $query->bindParam(":ip", $ip, PDO::PARAM_STR);
+            $query->bindParam(":id", $_SESSION["id"], PDO::PARAM_INT);
+        }
+        else{
+            $password = sha1($password);
+            $query = $this->db->prepare("UPDATE `users` SET `avatar` = :avatar, `password` = :password, `full_name` = :full_name, `phone_number` = :phone_number, 
+                                        `email` = :email, `ip` = :ip WHERE `id` = :id");
+            $query->bindParam(":avatar", $avatar, PDO::PARAM_STR);
+            $query->bindParam(":password", $password, PDO::PARAM_STR);
+            $query->bindParam(":full_name", $full_name, PDO::PARAM_STR);
+            $query->bindParam(":phone_number", $phone_number, PDO::PARAM_STR);
+            $query->bindParam(":email", $email, PDO::PARAM_STR);
+            $query->bindParam(":ip", $ip, PDO::PARAM_STR);
+            $query->bindParam(":id", $_SESSION["id"], PDO::PARAM_INT);
+        }
+
+        try {
+            $query->execute();
+
+            return true;
+
+        } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }    
 
     /**
      * @param void

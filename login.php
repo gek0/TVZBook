@@ -15,7 +15,7 @@ require_once ('inc/header.php');
 		<div class="toggle" title="Zamjeni formu"><i class="fa fa-times fa-pencil"></i></div>
 		<div class="form">
 			<h2>Prijava</h2>
-			<form action="" method="POST" name="login" id="login-form">
+			<form action="" method="POST" name="login" id="login-form" role="form">
 				<input type="text" name="username" placeholder="Korisničko ime" required>
 				<input type="password" name="password" placeholder="Lozinka" required>
 				<input type="hidden" name="request" value="login">
@@ -25,7 +25,7 @@ require_once ('inc/header.php');
 		</div>
 		<div class="form">
 			<h2>Registracija</h2>
-			<form action="" method="POST" name="register" id="register-form">
+			<form action="" method="POST" name="register" id="register-form" role="form">
 		    	<input type="text" name="full_name" placeholder="Ime i prezime" required>
 				<input type="text" name="username" placeholder="Korisničko ime" required>
 				<input type="password" name="password" placeholder="Lozinka" autocomplete="off" required>

@@ -20,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		    }	
 	    }    
 	    break;
-	  case 'register':
+	case 'register':
 	  	if(empty($_POST["full_name"]) || empty($_POST["username"]) || empty($_POST["password"]) || 
 	  		empty($_POST["password_again"]) || empty($_POST["email"]) || empty($_POST["phone_number"])){
 	  		echo json_encode(array('status' => 1, 'message' => 'Sva polja su obavezna.'));	
@@ -42,7 +42,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		    }
 		}
 	    break;
-	  default:
+	default:
 	    return false;
 	}
 }

@@ -36,7 +36,7 @@ body {
 }
 
 /* Form Module */
-.form-module {
+.form-module, .form-module-wider {
     height: auto;
     background: #ffffff;
     max-width: 320px;
@@ -47,7 +47,11 @@ body {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
 }
-.form-module .toggle {
+.form-module-wider{
+    max-width: 450px;    
+}
+.form-module .toggle,
+.form-module-wider .toggle {
     cursor: pointer;
     position: absolute;
     top: -0;
@@ -62,21 +66,25 @@ body {
     text-align: center;
 }
 
-.form-module .form {
+.form-module .form,
+.form-module-wider .form {
     display: none;
     padding: 40px;
 }
-.form-module .form:nth-child(2) {
+.form-module .form:nth-child(2),
+.form-module-wider .form:nth-child(2) {
     display: block;
 }
-.form-module h2 {
+.form-module h2,
+.form-module-wider h2 {
     margin: 0 0 20px;
     color: #33b5e5;
     font-size: 18px;
     font-weight: 400;
     line-height: 1;
 }
-.form-module input {
+.form-module input,
+.form-module-wider input  {
     outline: none;
     display: block;
     width: 100%;
@@ -88,7 +96,8 @@ body {
     -webkit-transition: 0.3s ease;
     transition: 0.3s ease;
 }
-.form-module input:focus {
+.form-module input:focus,
+.form-module-wider input:focus {
     border: 1px solid #33b5e5;
     color: #333333;
 }
@@ -108,19 +117,6 @@ button.main_button {
 button.main_button:hover {
     background: #178ab4;
 }
-.form-module .cta {
-    background: #f2f2f2;
-    width: 100%;
-    padding: 15px 40px;
-    box-sizing: border-box;
-    color: #666666;
-    font-size: 12px;
-    text-align: center;
-}
-.form-module .cta a {
-    color: #333333;
-    text-decoration: none;
-}
 
 .notification-container{
     width: 80%;
@@ -132,7 +128,6 @@ button.main_button:hover {
     text-align: center;
     border: none;
     padding: .5em;
-    display: none;
 }
 
 .success-container{
@@ -148,7 +143,7 @@ button.main_button:hover {
 a:hover{
     text-decoration: none;
 }
-.container{
+.container, .container-blank{
     height: auto;
     width: 80%;
     background: #ffffff;
@@ -159,7 +154,33 @@ a:hover{
     margin-top: 5em;
     padding: 1em;
 }
+.container-blank{
+    background: none; 
+    box-shadow: none;
+    border: none;  
+}
 
 .posts-section{
     border-left: 5px dashed #33b5e5;
+}
+
+span.notif{
+    text-align: center;
+    margin: .1em auto;
+    display: block;
+    border-top: 1px dashed #33b5e5;
+    border-bottom: 1px dashed #33b5e5;
+}
+
+.thumbnail-image{
+    max-width: 100px;
+    border: 1px dashed #33b5e5;
+    border-radius: 15%;
+    display: block;
+    text-align: center;
+    margin: .5em auto;
+}
+
+.text-center{
+    text-align: center;
 }

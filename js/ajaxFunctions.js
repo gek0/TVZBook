@@ -13,6 +13,11 @@ $(document).ready(function() {
                     $("#notification-data").attr("class", "notification-container success-container");
                     $("#notification-data").text(response.message).fadeIn(2000);
 
+                    setTimeout(function(){
+                        $("#notification-data").attr("class", "notification-container");
+                        $("#notification-data").empty();
+                    }, 3000);
+
                     if(redirect === true && redirectLocation !== ""){
                         setTimeout(function(){
                             window.location.replace(redirectLocation);
