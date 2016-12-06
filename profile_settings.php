@@ -6,6 +6,8 @@ if($session->session_test() === true){
     //get user data
     $userid = (int)$_SESSION[$session_id];
     $current_user = $users->user_get_data($userid);
+    //update user last online time
+    $users->update_online_time($userid);
 
     require_once ('inc/header.php');
 
@@ -131,6 +133,9 @@ if($session->session_test() === true){
 ?>
 <body>
 	<div id="backloader"></div>
+	<div class="text-center">
+        <h1 class="main-header">TVZBook</h1>
+    </div>
     <section class="container-blank">
     	<div class="module form-module-wider">
 		<div class=""></div>
@@ -145,10 +150,9 @@ if($session->session_test() === true){
 
 				<?php 
 					if(!empty($current_user[0]['avatar']) && $current_user[0]['avatar'] != "-"){
-						echo "<span class='notif'>Nova slika će pregaziti postojeću.</span>
-								<img class='img-responsive thumbnail-image' src='".$current_user[0]['avatar']."' />
-								<span class='notif'>Ostavi postojeću</span>
-								<input type='checkbox' name='avatar_status' value='1' checked>";
+						echo "<span class='notif'>Nova slika će pregaziti ovu - ostavi postojeću: </span>
+								<input type='checkbox' name='avatar_status' value='1' checked>
+								<img class='img-responsive thumbnail-image' src='".$current_user[0]['avatar']."' />";
 					}
 				?>
 				<input type="file" id="avatar" name="avatar" accept="image/*">
@@ -171,7 +175,7 @@ if($session->session_test() === true){
 
 	<hr>
 	<a href="index.php">
-    	<button class="main_button" id="return-button">Povratak <i class="fa fa-chevron-left"></i></button>
+    	<button class="main_button" id="return-button">Povratak <i class="fa fa-home"></i></button>
     </a>
     </section>
 

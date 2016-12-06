@@ -67,4 +67,14 @@ $(document).ready(function() {
         data_post_sender(data, false, "");
     });
 
+    /**
+     *  new post
+     */
+    $("#new-post-button").click(function(e) {
+        e.preventDefault();
+
+        var data = $("#new-post-form").serialize();        
+        data_post_sender(data, false, "");
+    });    
+
 });

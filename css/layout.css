@@ -101,6 +101,24 @@ body {
     border: 1px solid #33b5e5;
     color: #333333;
 }
+textarea{
+    outline: none;
+    display: block;
+    width: 100%;
+    height: 100px;
+    border: 1px solid #d9d9d9;
+    margin: 0 0 20px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    font-wieght: 400;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+    resize: none;
+}
+textarea:focus{
+    border: 1px solid #33b5e5;
+    color: #333333;
+}
 button.main_button {
     cursor: pointer;
     display: block;
@@ -160,16 +178,17 @@ a:hover{
     border: none;  
 }
 
-.posts-section{
-    border-left: 5px dashed #33b5e5;
-}
 
-span.notif{
+span.notif,
+span.notif-borderless{
     text-align: center;
     margin: .1em auto;
     display: block;
     border-top: 1px dashed #33b5e5;
     border-bottom: 1px dashed #33b5e5;
+}
+span.notif-borderless{
+    border: none;
 }
 
 .thumbnail-image{
@@ -183,4 +202,50 @@ span.notif{
 
 .text-center{
     text-align: center;
+}
+
+.new-comment,
+.comments-list{
+    width: 75%;
+    margin: 1em auto;
+}
+.comment-container,
+.comment-container-private{
+    border: 1px dashed #33b5e5;
+    width: 100%;
+    height: auto;
+    margin: 2em auto;
+    padding: .5em;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+}
+.comment-container-private{
+    background-color: rgba(168, 179, 196, .15);
+}
+
+h1.main-header{
+    font-size: 5em;
+    font-weight: bold;
+}
+
+
+@media only screen and (min-width: 991px) {
+
+    .right-border{
+       border-right: 1px dashed #33b5e5; 
+    }
+
+    .posts-section{
+        border-left: 5px dashed #33b5e5;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+
+    .right-border{
+       border-bottom: 1px dashed #33b5e5; 
+    }
+
+    .posts-section{
+        border-top: 5px dashed #33b5e5;
+    }
 }

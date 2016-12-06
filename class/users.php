@@ -1,8 +1,10 @@
 <?php
 /**
-*	users class: login/logout
- *               check user credentials
- *               change user credentials
+*   users class:      login/logout
+*                     register
+*                     get single user data
+*                     check user credentials
+*                     change user credentials
 */
 
 class users
@@ -53,8 +55,7 @@ class users
 			$query->execute();
 
 			if($query->rowCount() == 1)	{
-                $user_data = $query->fetchAll();
-				return $user_data;
+                return $user_data = $query->fetchAll();
 			} 
 			else 
 			{
@@ -67,6 +68,28 @@ class users
 			die($ex->getMessage());
 		}
 	}
+
+    /**
+     * @param $id
+     * update online time of user
+     */
+    public function update_online_time($id)
+    {
+        $last_online = date("y-m-d H:i:s");
+        
+        $query = $this->db->prepare("UPDATE `users` SET `last_online` = :last_online WHERE `id` = :id");
+        $query->bindParam(":last_online", $last_online, PDO::PARAM_STR);
+        $query->bindParam(":id", $id, PDO::PARAM_INT);
+
+        try {       
+            $query->execute();
+
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }       
+    }
 
     /**
      * @param $username
@@ -106,8 +129,7 @@ class users
 			
 		} catch(PDOException $ex){
 			die($ex->getMessage());
-		}	
-		
+		}		
 	}
 
     /**

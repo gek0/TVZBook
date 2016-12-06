@@ -6,6 +6,7 @@ require_once ('inc/config.php');
 require_once ('inc/functions.php');
 require_once ('class/session.php');
 require_once ('class/users.php');
+require_once ('class/posts.php');
 
 try{
 	$db = new PDO("mysql:host={$dbhost};dbname={$dbname};charset=utf8", $dbuser, $dbpass);
@@ -17,6 +18,7 @@ catch(PDOException $ex){
 
 //initialize objects
 $users = new users($db);
+$posts = new posts($db);
 $session = new session();
 
 //error/announce arrays

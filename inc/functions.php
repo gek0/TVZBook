@@ -184,5 +184,4 @@ function drop_empty($variable){
   return ($var === '') ? NULL : $var;
 }
 
-
 ?>

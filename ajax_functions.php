@@ -13,7 +13,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 	  	else{
 		    $result = $users->login($_POST["username"], $_POST["password"], $_SERVER['REMOTE_ADDR']);
 		    if($result === true){
-		    	echo json_encode(array('status' => 0, 'message' => 'Uspješno ste ulogirani...'));
+		    	echo json_encode(array('status' => 0, 'message' => 'Uspješno ste ulogirani.'));
 		    }
 		    else{
 				echo json_encode(array('status' => 1, 'message' => 'Pogrešno korisničko ime ili lozinka.'));
@@ -35,7 +35,25 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		  	$result = $users->register($_SERVER['REMOTE_ADDR'], $_POST["full_name"], $_POST["username"], 
 										$_POST["password"], $_POST["password_again"], $_POST["email"], $_POST["phone_number"]);
 		  	if($result === true){
-		    	echo json_encode(array('status' => 0, 'message' => 'Uspješno ste registrirani...'));
+		    	echo json_encode(array('status' => 0, 'message' => 'Uspješno ste registrirani, ulogirajte se.'));
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
+		    }
+		}
+	    break;
+	case 'new-post':
+		$post_statuses = ["public", "private"];
+	  	if(empty($_POST["post_text"]) || empty($_POST["status"])){
+	  		echo json_encode(array('status' => 1, 'message' => 'Sva polja su obavezna.'));	
+	  	}
+	    else if(!in_array($_POST["status"], $post_statuses)){
+	    	echo json_encode(array('status' => 1, 'message' => 'Status posta nije važeći.'));	
+	    }
+	    else{
+		  	$result = $posts->new_post($_SESSION[$session_id], $_POST["post_text"], $_POST["status"]);
+		  	if($result === true){
+		    	echo json_encode(array('status' => 0, 'message' => 'Post uspješno objavljen.'));
 		    }
 		    else{
 				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
