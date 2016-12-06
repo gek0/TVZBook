@@ -49,12 +49,10 @@ class users
 		$query = $this->db->prepare("SELECT * FROM `users` WHERE `id` = :id LIMIT 1");
 		$query->bindParam(":id", $id, PDO::PARAM_INT);
 		
-		try
-		{		
+		try	{		
 			$query->execute();
 
-			if($query->rowCount() == 1)
-			{
+			if($query->rowCount() == 1)	{
                 $user_data = $query->fetchAll();
 				return $user_data;
 			} 
@@ -86,19 +84,20 @@ class users
 		$query->bindParam(":username", $username, PDO::PARAM_STR);
 		$query->bindParam(":password", $password, PDO::PARAM_STR);
 
-		try
-		{		
+		try	{		
 			$query->execute();
 			
-			if($query->rowCount() == 1)
-			{
+			if($query->rowCount() == 1)	{
 				$sql_update = $this->db->prepare("UPDATE `users` SET `ip` = :ip, `last_online` = :last_online WHERE `username` = :username");
 				$sql_update->bindParam(":ip", $ip, PDO::PARAM_STR);
 				$sql_update->bindParam(":last_online", $last_online, PDO::PARAM_STR);
 				$sql_update->bindParam(":username", $username, PDO::PARAM_STR);
 				$sql_update->execute();
 				
-				return $query->fetchColumn(0);	
+				$_SESSION["id"] = $query->fetchColumn(0);
+                $_SESSION['username'] = $username;
+
+                return true;
 			} 
 			else 
 			{
@@ -145,6 +144,7 @@ class users
 
         try {
             $query->execute();
+
             return true;
 
         } catch (PDOException $ex) {

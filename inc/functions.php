@@ -175,4 +175,14 @@ function imageAlt($image_name){
     return substr($image_name, 0, -4);
 }
 
+/**
+ * @param $variable
+ * @return NULL or empty string
+ * empty a variable
+ */
+function drop_empty($variable){
+  return ($var === '') ? NULL : $var;
+}
+
+
 ?>
