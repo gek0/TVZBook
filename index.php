@@ -15,8 +15,9 @@ if($session->session_test() === true){
     //get all posts
     $posts_data = $posts->get_posts();
 
-    //get user posts count
+    //get user posts and comments count
     $posts_count = $posts->post_count($userid);
+    $comments_count = $comments->comment_count($userid);
 
     require_once ('inc/header.php');
 ?>
@@ -27,25 +28,43 @@ if($session->session_test() === true){
     </div>
     <section class="container">
         <div class="row">
-            <div class="col-md-3 user-section text-center">
+            <div class="col-md-3 user-section">
                 <?php 
                     if(!empty($current_user[0]['avatar']) && $current_user[0]['avatar'] != "-"){
-                        echo "<img class='img-responsive thumbnail-image' src='".$current_user[0]['avatar']."' />";
+                        echo "<img class='img-responsive thumbnail-image' src='".$current_user[0]['avatar']."' alt='Avatar korisnika ".$current_user[0]['username']."' title='Avatar korisnika ".$current_user[0]['username']."' />";
                     }
                     else{
-                        echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";    
+                        echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' alt='Nema avatara' title='Nema avatara' />";    
                     }
                 ?>
-                <span title="Ime i prezime (korisničko ime)"><i class="fa fa-user"></i> <?php echo $current_user[0]['full_name']." (".$current_user[0]['username'].")"; ?></span><br>
-                <span title="E-mail adresa"><i class="fa fa-envelope"></i> <?php echo $current_user[0]['email']; ?></span><br>
-                <span title="Član od"><i class="fa fa-calendar"></i> <?php echo date("d.m.Y", strtotime($current_user[0]['registration_date'])); ?></span><br>
-                <span title="Objavio postova"><i class="fa fa-pencil"></i> <?php echo $posts_count[0][0]; ?></span><br><hr>
+                <table class="table table-bordered">
+                    <tr>
+                        <td title="Ime i prezime"><i class="fa fa-user fa-big"></i></td>
+                        <td><?php echo $current_user[0]['full_name']." (".$current_user[0]['username'].")"; ?></td>
+                    </tr>
+                    <tr>
+                        <td title="E-mail adresa"><i class="fa fa-envelope fa-big"></i></td>
+                        <td><?php echo $current_user[0]['email']; ?></td>
+                    </tr>
+                    <tr>
+                        <td title="Član od"><i class="fa fa-calendar fa-big"></i></td>
+                        <td><?php echo date("d.m.Y", strtotime($current_user[0]['registration_date'])); ?></td>
+                    </tr>
+                    <tr>
+                        <td title="Postova i komentara"><i class="fa fa-pencil fa-big"></i></td>
+                        <td><?php echo "postova (".$posts_count[0][0].") | komentara (".$comments_count[0][0].")"; ?></td>
+                    </tr>
+                </table>
+                <hr>
 
+                <a href="my_wall.php">
+                    <button class="inverse_main" id="view-wall-button">Moj profil <i class="fa fa-list-ul"></i></button>
+                </a>
                 <a href="profile_settings.php">
-                    <button class="main_button" id="view-settings-button">Uredi profil <i class="fa fa-cogs"></i></button>
+                    <button class="inverse_main" id="view-settings-button">Uredi profil <i class="fa fa-cogs"></i></button>
                 </a>
                 <a href="index.php?logout">
-                    <button class="main_button" id="logout-button">Odlogiraj se <i class="fa fa-sign-out"></i></button>
+                    <button class="inverse_main" id="logout-button">Odlogiraj se <i class="fa fa-sign-out"></i></button>
                 </a>
             </div>
             <div class="col-md-9 posts-section">
@@ -79,7 +98,7 @@ if($session->session_test() === true){
                                                 echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
                                                 echo "<span class='notif-borderless'>".$post['full_name']."<br>
-                                                        <i class='fa fa-eye' title='Post je vidljiv svima'></i>
+                                                        <i class='fa fa-eye fa-big' title='Post je vidljiv svima'></i>
                                                       </span>";
                                 echo '  </div>
                                         <div class="col-md-9">
@@ -98,7 +117,7 @@ if($session->session_test() === true){
                                                 echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
                                                 echo "<span class='notif-borderless'>".$post['full_name']."<br>
-                                                        <i class='fa fa-eye-slash' title='Post je vidljiv samo tebi'></i>
+                                                        <i class='fa fa-eye-slash fa-big' title='Post je vidljiv samo tebi'></i>
                                                       </span>";
                                 echo '  </div>
                                         <div class="col-md-9">

@@ -1,7 +1,6 @@
 <?php
 /**
-*   posts class:	get single post
-*                   get posts
+*   posts class:    get posts
 *					add new post
 *                   post count for certain user
 *
@@ -21,7 +20,7 @@ class posts
 
     /**
      * @param $userid
-     * get single post data
+     * get post count for user
      */
     public function post_count($userid)
 	{
@@ -42,30 +41,6 @@ class posts
 			die($ex->getMessage());
 		}
 	}
-
-     /**
-     * @param $user_id
-     * get post count for certain user
-     */
-    public function post_get_data($id)
-    {
-        $query = $this->db->prepare("SELECT * FROM `posts` WHERE `id` = :id LIMIT 1");
-        $query->bindParam(":id", $id, PDO::PARAM_INT);
-        
-        try {       
-            $query->execute();
-
-            if($query->rowCount() == 1) {
-                return $post_data = $query->fetchAll();
-            } 
-            else {
-                return false;
-            }
-            
-        } catch(PDOException $ex) {
-            die($ex->getMessage());
-        }
-    }   
 
     /**
      * @param null   
