@@ -23,7 +23,7 @@ if($session->session_test() === true){
 		$file_ext = explode('.', $_FILES['avatar']['name']);
 		$file_ext = end($file_ext);				
 
-		if(in_array($file_ext, $extensions ) === false){
+		if(in_array($file_ext, $extensions) === false && empty($_FILES['avatar'])){
 			echo '<script type="text/javascript">';
 			echo 'setTimeout(function () { 
 					swal("Greška", "Ekstenzija avatara nije dozvoljena.", "error");
@@ -52,7 +52,6 @@ if($session->session_test() === true){
             return $avatar = $path.$file_name.".".$file_ext;
         }
     }
-
 
 	if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){    
     	if(empty($_POST["full_name"]) || empty($_POST["email"]) || empty($_POST["phone_number"])){
@@ -109,7 +108,7 @@ if($session->session_test() === true){
 		  	if($result === true){
 				echo '<script type="text/javascript">';
 				echo 'setTimeout(function () { 
-						swal("Greška", "Profilno uspješno izmjenjen..", "success");
+						swal("Uspjeh", "Profilno uspješno izmjenjen.", "success");
 					  }, 500);
 					  setTimeout(function () { 
 						window.location = "profile_settings.php";
@@ -158,7 +157,7 @@ if($session->session_test() === true){
 				<input type="file" id="avatar" name="avatar" accept="image/*">
 				<input type="hidden" name="request" value="settings-edit">				
 
-				<button class="main_button" id="edit-settings-button">Uredi profil <i class="fa fa-check"></i></button>
+				<button class="inverse_main" id="edit-settings-button">Uredi profil <i class="fa fa-check"></i></button>
 			</form>
 		</div>
 
@@ -175,7 +174,7 @@ if($session->session_test() === true){
 
 	<hr>
 	<a href="index.php">
-    	<button class="main_button" id="return-button">Povratak <i class="fa fa-home"></i></button>
+    	<button class="inverse_main" id="return-button">Povratak <i class="fa fa-home"></i></button>
     </a>
     </section>
 

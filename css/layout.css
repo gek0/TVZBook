@@ -146,6 +146,9 @@ button.inverse_main:hover {
     border: 1px solid #33b5e5;
     color: #33b5e5;
 }
+button.inverse_main:disabled {
+    background: rgba(51, 181, 229, .5);
+}
 
 .notification-container{
     width: 80%;

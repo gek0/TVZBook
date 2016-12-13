@@ -60,6 +60,23 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		    }
 		}
 	    break;
+	case 'load-more':
+		if(isset($_POST['start']) && isset($_POST['limit'])){
+			$start = $_POST["start"];
+			$limit = $_POST["limit"];
+
+			$result = $posts->get_posts_by_offset($start, $limit);
+			if($result){
+		    	echo json_encode(array('status' => 0, 'message' => $result));
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Dostigli ste kraj.'));
+		    }
+		}
+		else{
+			echo json_encode(array('status' => 1, 'message' => 'Dogodila se greška.'));	
+		}
+	    break;
 	default:
 	    return false;
 	}

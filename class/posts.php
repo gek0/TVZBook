@@ -1,6 +1,7 @@
 <?php
 /**
 *   posts class:    get posts
+*                   get posts by offset
 *					add new post
 *                   post count for certain user
 *
@@ -58,7 +59,29 @@ class posts
         } catch(PDOException $ex) {
             die($ex->getMessage());
         }
-    }    
+    }
+
+    /**
+     * @param null   
+     * get posts by offset
+     */
+    public function get_posts_by_offset($start, $limit)
+    {
+        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id
+                                        WHERE `posts`.status = 'public' ORDER BY `posts`.id 
+                                        DESC LIMIT :limit OFFSET :start");
+        $query->bindParam(":limit", intval($limit, 10), PDO::PARAM_INT);
+        $query->bindParam(":start", intval($start, 10), PDO::PARAM_INT);
+        
+        try {       
+            $query->execute();
+
+            return $post_data = $query->fetchAll();
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }  
 
     /**
      * @param $author_id

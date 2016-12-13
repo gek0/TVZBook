@@ -20,7 +20,7 @@ require_once ('inc/header.php');
 				<input type="password" name="password" placeholder="Lozinka" required>
 				<input type="hidden" name="request" value="login">
 
-				<button class="main_button" id="login-button">Prijavi se <i class="fa fa-check"></i></button>
+				<button class="inverse_main" id="login-button">Prijavi se <i class="fa fa-check"></i></button>
 			</form>
 		</div>
 		<div class="form">
@@ -34,7 +34,7 @@ require_once ('inc/header.php');
 				<input type="tel" name="phone_number" placeholder="Telefon/Mobitel" required>
 				<input type="hidden" name="request" value="register">
 
-				<button class="main_button" id="register-button">Registriraj se <i class="fa fa-check"></i></button>
+				<button class="inverse_main" id="register-button">Registriraj se <i class="fa fa-check"></i></button>
 		    </form>
 		</div>
 

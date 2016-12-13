@@ -13,7 +13,9 @@ if($session->session_test() === true){
     $users->update_online_time($userid);
 
     //get all posts
-    $posts_data = $posts->get_posts();
+    //$posts_data = $posts->get_posts();
+    //get posts
+    $posts_data = $posts->get_posts_by_offset(START, LIMIT);
 
     //get user posts and comments count
     $posts_count = $posts->post_count($userid);
@@ -78,7 +80,7 @@ if($session->session_test() === true){
                         </div>
                         <input type="hidden" name="request" value="new-post">
 
-                        <button class="main_button" id="new-post-button">Objavi <i class="fa fa-pencil"></i></button>
+                        <button class="inverse_main" id="new-post-button">Objavi <i class="fa fa-pencil"></i></button>
                     </form>
 
                     <div id="notification-data" class="notification-container"></div> 
@@ -89,46 +91,32 @@ if($session->session_test() === true){
                 <div class="comments-list">
                     <?php
                         foreach ($posts_data as $post) {
-                            if($post['status'] == 'public'){
-                                echo '<div class="row comment-container">
-                                        <div class="col-md-3 right-border">';
-                                            if(!empty($post['avatar']) && $post['avatar'] != "-")
-                                                echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
-                                            else
-                                                echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
+                            echo '<div class="row comment-container">
+                                    <div class="col-md-3 right-border text-center">';
+                                        if(!empty($post['avatar']))
+                                            echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
+                                        else
+                                            echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
-                                                echo "<span class='notif-borderless'>".$post['full_name']."<br>
-                                                        <i class='fa fa-eye fa-big' title='Post je vidljiv svima'></i>
-                                                      </span>";
-                                echo '  </div>
+                                            echo $post['full_name'];
+                            echo '  </div>
                                         <div class="col-md-9">
                                             <strong>Objavljeno: </strong>';
                                             echo date("d.m.Y H:m", strtotime($post['date_created']))."h<hr>";
                                             echo $post["post_text"];
-                                echo '  </div>
-                                      </div>'; 
-                            }
-                            else if($post['status'] == 'private' && $userid == $post['author_id']){
-                                echo '<div class="row comment-container-private">
-                                        <div class="col-md-3 right-border">';
-                                            if(!empty($post['avatar']) && $post['avatar'] != "-")
-                                                echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
-                                            else
-                                                echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
-
-                                                echo "<span class='notif-borderless'>".$post['full_name']."<br>
-                                                        <i class='fa fa-eye-slash fa-big' title='Post je vidljiv samo tebi'></i>
-                                                      </span>";
-                                echo '  </div>
-                                        <div class="col-md-9">
-                                            <strong>Objavljeno: </strong>';
-                                            echo date("d.m.Y H:m", strtotime($post['date_created']))."h<hr>";
-                                            echo $post["post_text"];
-                                echo '  </div>
-                                      </div>';    
-                            }  
+                            echo '  </div>
+                                    </div>'; 
                         }
                     ?>
+
+                    <form action="" method="POST" name="load-more" id="load-more-form" role="form">
+                        <input type="hidden" id="start" value="<?php echo START; ?>" />
+                        <input type="hidden" id="limit" value="<?php echo LIMIT; ?>" >                        
+                        <input type="hidden" id="load-more-request" name="request" value="load-more">
+
+                        <button class="inverse_main" id="load-more-button">Učitaj još <i class="fa fa-refresh"></i></button>
+                    </form>
+                    <div id="notification-data-load" class="notification-container"></div>
                 </div>
             </div>
         </div>
