@@ -99,11 +99,20 @@ if($session->session_test() === true){
                                             echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
                                             echo $post['full_name'];
+
+                                            echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
+                                            echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];
                             echo '  </div>
                                         <div class="col-md-9">
                                             <strong>Objavljeno: </strong>';
                                             echo date("d.m.Y H:m", strtotime($post['date_created']))."h<hr>";
                                             echo $post["post_text"];
+
+                                            echo "<div class='text-center'>
+                                                        <a href='post.php?id=".$post[0]."'>
+                                                            <button class='inverse_main_small'>Pregledaj <i class='fa fa-eye'></i></button>
+                                                        </a>
+                                                    </div>";
                             echo '  </div>
                                     </div>'; 
                         }

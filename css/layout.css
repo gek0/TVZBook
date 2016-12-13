@@ -120,7 +120,8 @@ textarea:focus{
     color: #333333;
 }
 button.main_button,
-button.inverse_main {
+button.inverse_main,
+button.inverse_main_small {
     cursor: pointer;
     display: block;
     background: #33b5e5;
@@ -137,17 +138,25 @@ button.main_button:hover {
     background: #178ab4;
 }
 
-button.inverse_main{
+button.inverse_main,
+button.inverse_main_small {
     background: #33b5e5;
     border: 1px solid #ffffff;
 }
-button.inverse_main:hover {
+button.inverse_main:hover,
+button.inverse_main_small:hover {
     background: #ffffff;
     border: 1px solid #33b5e5;
     color: #33b5e5;
 }
 button.inverse_main:disabled {
     background: rgba(51, 181, 229, .5);
+}
+button.inverse_main_small{
+    padding: .05em;
+    max-width: 100px;
+    margin-top: 1em;
+    display: block;
 }
 
 .notification-container{

@@ -63,13 +63,20 @@ $(document).ready(function() {
         return '<div class="row comment-container">' +
                     '<div class="col-md-3 right-border text-center">' +
                         avatar_img +
-                        full_name +                   
+                        full_name +
+                        '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
+                        '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number +             
                     '</div>' +
                     '<div class="col-md-9">' +
                         '<strong>Objavljeno: </strong>' +
                         date_formated + 
                         '<hr>' +
                         post_text +
+                        '<div class="text-center">' +
+                            '<a href="post.php?id=' + id + '">' +
+                                '<button class="inverse_main_small">Pregledaj <i class="fa fa-eye"></i></button>' +
+                            '</a>' +
+                        '</div>' +
                     '</div>' +
                 '</div>';
     }
@@ -95,7 +102,7 @@ $(document).ready(function() {
 
                     response.message.forEach(function(item, index){
                         if ($("div.comment-container").length){
-                            $("div.comment-container:last").after(create_comment_placeholder(item['id'], item['avatar'], 
+                            $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
                                                                                     item['post_text'], item['date_created'], 
                                                                                     item['comment_number'], item['like_number'], 
                                                                                     item['full_name']));    
