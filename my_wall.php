@@ -106,7 +106,7 @@ if($session->session_test() === true){
                                     echo '  </div>
                                             </div>'; 
                             }
-                            else if($post['status'] == 'private' && $userid == $post['author_id']){
+                            else if($post['status'] == 'private' && ($userid == $post['author_id'])){
                                     echo '<div class="row comment-container comment-private">
                                             <div class="col-md-3 right-border text-center">';
                                                 if(!empty($post['avatar']))

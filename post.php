@@ -18,6 +18,20 @@ if($session->session_test() === true){
     	if($posts->post_exists($post_id)){
     		$post_data = call_user_func_array('array_merge', $posts->get_post($post_id));
 
+            if($post_data['status'] == 'public'){
+                //ok
+            }
+            else if($post_data['status'] == 'private' && ($userid != $post_data['author_id'])){
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () { 
+                        swal("Greška", "Ovaj post je privatan.", "error");
+                      }, 500);
+                      setTimeout(function () { 
+                        window.location = "index.php";
+                      }, 3000);';
+                echo '</script>';
+                die;  
+            }
     	}
     	else{
 			echo '<script type="text/javascript">';
