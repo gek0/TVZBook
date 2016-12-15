@@ -59,8 +59,11 @@ if($session->session_test() === true){
                 <hr>
 
                 <a href="my_wall.php">
-                    <button class="inverse_main" id="view-wall-button">Moj profil <i class="fa fa-list-ul"></i></button>
+                    <button class="inverse_main" id="view-wall-button">Moj zid <i class="fa fa-list-ul"></i></button>
                 </a>
+                <a href="profile.php?user=<?php echo $current_user['slug']; ?>">
+                    <button class="inverse_main" id="view-wall-button">Moj profil <i class="fa fa-user"></i></button>
+                </a>                
                 <a href="profile_settings.php">
                     <button class="inverse_main" id="view-settings-button">Uredi profil <i class="fa fa-cogs"></i></button>
                 </a>
