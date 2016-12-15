@@ -53,6 +53,9 @@ body {
 .extended{
     max-width: 650px;
 }
+.extended-wide{
+    max-width: 850px;
+}
 .form-module .toggle,
 .form-module-wider .toggle {
     cursor: pointer;
