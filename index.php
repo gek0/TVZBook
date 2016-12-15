@@ -14,7 +14,7 @@ if($session->session_test() === true){
     $users->update_online_time($userid);
 
     //get posts
-    $posts_data = $posts->get_posts_by_offset(START, LIMIT);
+    $posts_data = $posts->get_posts_by_offset(0, LIMIT);
 
     //get user posts and comments count
     $posts_count = $posts->post_count($userid);
