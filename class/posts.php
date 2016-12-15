@@ -46,11 +46,14 @@ class posts
 
     /**
      * @param null   
-     * get posts
+     * get posts for user
      */
-    public function get_posts()
+    public function get_posts_for_user($userid)
     {
-        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id ORDER BY `posts`.id DESC");
+        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id 
+                                            WHERE `users`.id = :userid 
+                                            ORDER BY `posts`.id DESC");
+        $query->bindParam(":userid", $userid, PDO::PARAM_INT);
         
         try {       
             $query->execute();
@@ -69,7 +72,8 @@ class posts
      */
     public function get_last_post()
     {
-        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id ORDER BY `posts`.id DESC LIMIT 1");
+        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id 
+                                        ORDER BY `posts`.id DESC LIMIT 1");
         
         try {       
             $query->execute();
@@ -115,7 +119,8 @@ class posts
     	$status = htmlspecialchars($status, ENT_QUOTES, "UTF-8");
 		$date_created = date("y-m-d H:i:s");
 
-        $query = $this->db->prepare("INSERT INTO `posts` (`author_id`, `post_text`, `status`, `date_created`) VALUES (:author_id, :post_text, :status, :date_created)");
+        $query = $this->db->prepare("INSERT INTO `posts` (`author_id`, `post_text`, `status`, `date_created`) 
+                                        VALUES (:author_id, :post_text, :status, :date_created)");
         $query->bindParam(":author_id", $author_id, PDO::PARAM_INT);
         $query->bindParam(":post_text", $post_text, PDO::PARAM_STR);
         $query->bindParam(":status", $status, PDO::PARAM_STR);
