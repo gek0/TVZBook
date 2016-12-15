@@ -50,6 +50,9 @@ body {
 .form-module-wider{
     max-width: 450px;    
 }
+.extended{
+    max-width: 650px;
+}
 .form-module .toggle,
 .form-module-wider .toggle {
     cursor: pointer;
@@ -181,19 +184,21 @@ button.inverse_main_small{
 .table{
     display: table;
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
     padding: .25em;
+    height: 20px;
+    vertical-align: center;
+    border: none;
+    margin: .25em auto;
+}
+.table td:first-child {
+    text-align: center;
+}
+.table td:nth-child(2) {
+    padding-left: 1em;
 }
 .table-bordered td{
     border: 1px solid rgba(51, 181, 229, .15);
-    height: 20px;
-    vertical-align: center;
-}
-.table-bordered td:first-child {
-    text-align: center;
-}
-.table-bordered td:nth-child(2) {
-    padding-left: 1em;
 }
 
 
@@ -273,6 +278,17 @@ h1.main-header{
     font-size: 1.25em;
 }
 
+.expand{
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 1.5em;   
+}
+
+p.user_stats{
+    font-size: 1.15em;
+    line-height: 1.15em;
+    margin: .5em auto;
+}
 
 @media only screen and (min-width: 991px) {
 
@@ -293,5 +309,9 @@ h1.main-header{
 
     .posts-section{
         border-top: 5px dashed #33b5e5;
+    }
+
+    .table{
+        width: 50%;
     }
 }

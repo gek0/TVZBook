@@ -67,7 +67,12 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 
 			$result = $posts->get_posts_by_offset($start, $limit);
 			if($result){
-		    	echo json_encode(array('status' => 0, 'message' => $result));
+				if(count($result) >= 5){
+					echo json_encode(array('status' => 0, 'message' => $result, 'count' => count($result)));
+				}
+		    	else{
+		    		echo json_encode(array('status' => 0, 'message' => $result, 'count' => count($result), 'extra_message' => 'Dostigli ste kraj.'));
+		    	}
 		    }
 		    else{
 				echo json_encode(array('status' => 1, 'message' => 'Dostigli ste kraj.'));

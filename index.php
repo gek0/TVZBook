@@ -8,12 +8,11 @@ if($session->session_test() === true){
 
     //get user data
     $userid = (int)$_SESSION[$session_id];
-    $current_user = $users->user_get_data($userid);
+    $current_user = call_user_func_array('array_merge', $users->user_get_data($userid));
+
     //update user last online time
     $users->update_online_time($userid);
 
-    //get all posts
-    //$posts_data = $posts->get_posts();
     //get posts
     $posts_data = $posts->get_posts_by_offset(START, LIMIT);
 
@@ -26,31 +25,31 @@ if($session->session_test() === true){
 <body>
     <div id="backloader"></div>
     <div class="text-center">
-        <h1 class="main-header">TVZBook</h1>
+        <h1 class="main-header"><?php echo SITE_NAME; ?></h1>
     </div>
     <section class="container">
         <div class="row">
             <div class="col-md-3 user-section">
                 <?php 
-                    if(!empty($current_user[0]['avatar']) && $current_user[0]['avatar'] != "-"){
-                        echo "<img class='img-responsive thumbnail-image' src='".$current_user[0]['avatar']."' alt='Avatar korisnika ".$current_user[0]['username']."' title='Avatar korisnika ".$current_user[0]['username']."' />";
+                    if(!empty($current_user['avatar']) && $current_user['avatar'] != "-"){
+                        echo "<img class='img-responsive thumbnail-image' src='".$current_user['avatar']."' alt='Avatar korisnika ".$current_user['username']."' title='Avatar korisnika ".$current_user['username']."' />";
                     }
                     else{
                         echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' alt='Nema avatara' title='Nema avatara' />";    
                     }
                 ?>
-                <table class="table table-bordered">
+                <table class="table">
                     <tr>
                         <td title="Ime i prezime"><i class="fa fa-user fa-big"></i></td>
-                        <td><?php echo $current_user[0]['full_name']." (".$current_user[0]['username'].")"; ?></td>
+                        <td><?php echo $current_user['full_name']." (".$current_user['username'].")"; ?></td>
                     </tr>
                     <tr>
                         <td title="E-mail adresa"><i class="fa fa-envelope fa-big"></i></td>
-                        <td><?php echo $current_user[0]['email']; ?></td>
+                        <td><?php echo $current_user['email']; ?></td>
                     </tr>
                     <tr>
                         <td title="Član od"><i class="fa fa-calendar fa-big"></i></td>
-                        <td><?php echo date("d.m.Y", strtotime($current_user[0]['registration_date'])); ?></td>
+                        <td><?php echo date("d.m.Y.", strtotime($current_user['registration_date'])); ?></td>
                     </tr>
                     <tr>
                         <td title="Postova i komentara"><i class="fa fa-pencil fa-big"></i></td>
@@ -98,7 +97,7 @@ if($session->session_test() === true){
                                         else
                                             echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
-                                            echo $post['full_name'];
+                                            echo "<a href='profile.php?user=".$post['slug']."'>".$post['full_name']."</a>";
 
                                             echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
                                             echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];

@@ -9,7 +9,7 @@ require_once ('inc/header.php');
 
 <body>
 	<div class="pen-title">
-	  <h1>TVZBook</h1>
+	  <h1><?php echo SITE_NAME; ?></h1>
 	</div>
 	<div class="module form-module">
 		<div class="toggle" title="Zamjeni formu"><i class="fa fa-times fa-pencil"></i></div>

@@ -50,7 +50,7 @@ $(document).ready(function() {
     /**
      *  generate comment output
      */
-    function create_comment_placeholder(id, avatar, post_text, date_created, comment_number, like_number, full_name){ 
+    function create_comment_placeholder(id, avatar, post_text, date_created, comment_number, like_number, full_name, slug){ 
         if(avatar != '') {
             avatar_img = '<img class="img-responsive thumbnail-image" src="'+ avatar +'" />';
         }
@@ -63,7 +63,7 @@ $(document).ready(function() {
         return '<div class="row comment-container">' +
                     '<div class="col-md-3 right-border text-center">' +
                         avatar_img +
-                        full_name +
+                        '<a href="profile.php?user=' + slug + '">' + full_name + '</a>' + 
                         '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
                         '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number +             
                     '</div>' +
@@ -105,19 +105,30 @@ $(document).ready(function() {
                             $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
                                                                                     item['post_text'], item['date_created'], 
                                                                                     item['comment_number'], item['like_number'], 
-                                                                                    item['full_name']));    
+                                                                                    item['full_name'], item['slug']));    
                         }
                         else{
                             $("div.container-comments").html(create_comment_placeholder(item['id'], item['avatar'], 
                                                                                     item['post_text'], item['date_created'], 
                                                                                     item['comment_number'], item['like_number'], 
-                                                                                    item['full_name']));
+                                                                                    item['full_name'], item['slug']));
                         }
 
                         $("div.ontainer-comments:last").hide().fadeIn(1000);
                     });
 
                     $("html, body").animate({ scrollTop: $(document).height() - $(window).height() }, 500, 'linear');
+
+                    if(response.count < 5){
+                        $("#notification-data-load").attr("class", "notification-container failure-container");
+                        $("#notification-data-load").text(response.extra_message).fadeIn(2000);
+                        $("#load-more-button").prop("disabled", true);
+
+                        setTimeout(function(){
+                            $("#notification-data-load").attr("class", "notification-container");
+                            $("#notification-data-load").empty();
+                        }, 3000);                        
+                    }
                 }
                 else{
                     $("#notification-data-load").attr("class", "notification-container failure-container");

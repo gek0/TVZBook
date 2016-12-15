@@ -6,6 +6,7 @@ if($session->session_test() === true){
     //get user data
     $userid = (int)$_SESSION[$session_id];
     $current_user = $users->user_get_data($userid);
+    
     //update user last online time
     $users->update_online_time($userid);
 
@@ -133,7 +134,7 @@ if($session->session_test() === true){
 <body>
 	<div id="backloader"></div>
 	<div class="text-center">
-        <h1 class="main-header">TVZBook</h1>
+        <h1 class="main-header"><?php echo SITE_NAME; ?></h1>
     </div>
     <section class="container-blank">
     	<div class="module form-module-wider">

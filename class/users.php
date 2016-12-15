@@ -1,10 +1,14 @@
 <?php
 /**
-*   users class:      login/logout
+*   users class:      login
 *                     register
+*                     get current user data
 *                     get single user data
-*                     check user credentials
+*                     check if users exist by username
+*                     check if users exist by slug
+*                     update login time
 *                     change user credentials
+*                     logout
 */
 
 class users
@@ -39,7 +43,29 @@ class users
         } catch (PDOException $ex) {
             die($ex->getMessage());
         }
-    }	
+    }
+
+    /**
+     * @param $slug
+     * check if user exists by slug
+     */
+    public function user_exists_slug($slug)
+    {
+        $query = $this->db->prepare("SELECT `id` FROM `users` WHERE `slug` = :slug LIMIT 1");
+        $query->bindParam(":slug", $slug, PDO::PARAM_STR);
+
+        try {
+            $query->execute();
+            if ($query->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }   
 
 
     /**
@@ -68,6 +94,34 @@ class users
 			die($ex->getMessage());
 		}
 	}
+
+    /**
+     * @param $slug
+     * get user data
+     */
+    public function get_user($slug)
+    {
+        $query = $this->db->prepare("SELECT * FROM `users` WHERE `slug` = :slug LIMIT 1");
+        $query->bindParam(":slug", $slug, PDO::PARAM_STR);
+        
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $user_data = $query->fetchAll();
+            } 
+            else 
+            {
+                return false;
+            }
+            
+        } 
+        catch(PDOException $ex)
+        {
+            die($ex->getMessage());
+        }
+    }
+
 
     /**
      * @param $id
@@ -146,6 +200,7 @@ class users
     {
     	$ip = htmlspecialchars($ip, ENT_QUOTES, "UTF-8");
     	$full_name = htmlspecialchars($full_name, ENT_QUOTES, "UTF-8");
+        $slug = safe_name($full_name);
         $username = htmlspecialchars($username, ENT_QUOTES, "UTF-8");		
 		$password = sha1($password);
 		$email = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
@@ -153,10 +208,11 @@ class users
 		$registration_date = date("y-m-d H:i:s");
 		$last_online = date("y-m-d H:i:s");
 
-        $query = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `full_name`, `phone_number`, `email`, `ip`, `registration_date`, `last_online`) VALUES (:username, :password, :full_name, :phone_number, :email, :ip, :registration_date, :last_online)");
+        $query = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `full_name`, `slug`, `phone_number`, `email`, `ip`, `registration_date`, `last_online`) VALUES (:username, :password, :full_name, :slug, :phone_number, :email, :ip, :registration_date, :last_online)");
         $query->bindParam(":username", $username, PDO::PARAM_STR);
         $query->bindParam(":password", $password, PDO::PARAM_STR);
         $query->bindParam(":full_name", $full_name, PDO::PARAM_STR);
+        $query->bindParam(":slug", $slug, PDO::PARAM_STR);
         $query->bindParam(":phone_number", $phone_number, PDO::PARAM_STR);
         $query->bindParam(":email", $email, PDO::PARAM_STR);
         $query->bindParam(":ip", $ip, PDO::PARAM_STR);
@@ -186,15 +242,17 @@ class users
     public function update_settings($ip, $full_name, $password, $password_again, $email, $phone_number, $avatar)
     {
         $ip = htmlspecialchars($ip, ENT_QUOTES, "UTF-8");
-        $full_name = htmlspecialchars($full_name, ENT_QUOTES, "UTF-8");        
+        $full_name = htmlspecialchars($full_name, ENT_QUOTES, "UTF-8");
+        $slug = safe_name($full_name);      
         $email = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
         $phone_number = htmlspecialchars($phone_number, ENT_QUOTES, "UTF-8");
 
         if($password == "-"){
-            $query = $this->db->prepare("UPDATE `users` SET `avatar` = :avatar, `full_name` = :full_name, `phone_number` = :phone_number, 
+            $query = $this->db->prepare("UPDATE `users` SET `avatar` = :avatar, `full_name` = :full_name, `slug` = :slug, `phone_number` = :phone_number, 
                                         `email` = :email,`ip` = :ip WHERE `id` = :id");
             $query->bindParam(":avatar", $avatar, PDO::PARAM_STR);
             $query->bindParam(":full_name", $full_name, PDO::PARAM_STR);
+            $query->bindParam(":slug", $slug, PDO::PARAM_STR);
             $query->bindParam(":phone_number", $phone_number, PDO::PARAM_STR);
             $query->bindParam(":email", $email, PDO::PARAM_STR);
             $query->bindParam(":ip", $ip, PDO::PARAM_STR);
@@ -202,11 +260,12 @@ class users
         }
         else{
             $password = sha1($password);
-            $query = $this->db->prepare("UPDATE `users` SET `avatar` = :avatar, `password` = :password, `full_name` = :full_name, `phone_number` = :phone_number, 
+            $query = $this->db->prepare("UPDATE `users` SET `avatar` = :avatar, `password` = :password, `full_name` = :full_name, `slug` = :slug, `phone_number` = :phone_number, 
                                         `email` = :email, `ip` = :ip WHERE `id` = :id");
             $query->bindParam(":avatar", $avatar, PDO::PARAM_STR);
             $query->bindParam(":password", $password, PDO::PARAM_STR);
             $query->bindParam(":full_name", $full_name, PDO::PARAM_STR);
+            $query->bindParam(":slug", $slug, PDO::PARAM_STR);
             $query->bindParam(":phone_number", $phone_number, PDO::PARAM_STR);
             $query->bindParam(":email", $email, PDO::PARAM_STR);
             $query->bindParam(":ip", $ip, PDO::PARAM_STR);
