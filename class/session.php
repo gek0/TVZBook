@@ -5,35 +5,41 @@
 
 class session
 {
-	//check session ID
+    /**
+     * @param null   
+     * check session id
+     */
 	public function session_test()
 	{
 		global $session_id;
 
-		if(isset($_SESSION[$session_id]))
-		{
+		if(isset($_SESSION[$session_id])){
 			return true;
 		} 
-		else 
-		{
+		else {
 			return false;
 		}
 	}
 	
-	//valid session
+    /**
+     * @param $location   
+     * if session is valid
+     */
 	public function session_true($location)
 	{
-		if($this->session_test() === true)
-		{
+		if($this->session_test() === true){
 			header("Location: ".$location);
 			exit();
 		}
 	}
 	
-	//invalid session
-	public function session_false($location){
-		if($this->session_test() === false)
-		{
+    /**
+     * @param $location   
+     * if session is invalid
+     */
+	public function session_false($location)
+	{
+		if($this->session_test() === false){
 			header("Location: ".$location);
 			exit();
 		}

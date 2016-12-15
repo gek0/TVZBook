@@ -283,7 +283,7 @@ class users
     }    
 
     /**
-     * @param void
+     * @param null
      * logout current user
      */
     public function logout()

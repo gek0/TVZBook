@@ -3,7 +3,9 @@
 *   posts class:    get posts
 *                   get posts by offset
 *					add new post
-*                   get_last_post
+*                   get last post
+*                   get post
+*                   check if post exists
 *                   post count for certain user
 *
 */
@@ -19,6 +21,28 @@ class posts
 	{
 	    $this->db = $database;
 	}
+
+    /**
+     * @param $post_id
+     * check if post exists
+     */
+    public function post_exists($post_id)
+    {
+        $query = $this->db->prepare("SELECT `id` FROM `posts` WHERE `id` = :post_id LIMIT 1");
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+
+        try {
+            $query->execute();
+            if ($query->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
 
     /**
      * @param $userid
@@ -45,7 +69,7 @@ class posts
     }
 
     /**
-     * @param null   
+     * @param $userid   
      * get posts for user
      */
     public function get_posts_for_user($userid)
@@ -86,7 +110,28 @@ class posts
     }
 
     /**
-     * @param null   
+     * @param $post_id   
+     * get post
+     */
+    public function get_post($post_id)
+    {
+        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id 
+                                        WHERE `posts`.id = :post_id
+                                        ORDER BY `posts`.id DESC LIMIT 1");
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+        
+        try {       
+            $query->execute();
+
+            return $post_data = $query->fetchAll();
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $start, limit   
      * get posts by offset
      */
     public function get_posts_by_offset($start, $limit)
