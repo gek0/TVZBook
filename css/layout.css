@@ -257,7 +257,7 @@ span.notif-borderless{
     margin: 1em auto;
 }
 .comment-container,
-.comment-container-private{
+.comment-private{
     border: 1px dashed #33b5e5;
     width: 100%;
     height: auto;
@@ -265,7 +265,7 @@ span.notif-borderless{
     padding: .5em;
     box-shadow: 0 0 3px rgba(0, 0, 0, .1);
 }
-.comment-container-private{
+.comment-private{
     background-color: rgba(168, 179, 196, .15);
 }
 

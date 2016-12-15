@@ -3,6 +3,7 @@
 *   posts class:    get posts
 *                   get posts by offset
 *					add new post
+*                   get_last_post
 *                   post count for certain user
 *
 */
@@ -24,24 +25,24 @@ class posts
      * get post count for user
      */
     public function post_count($userid)
-	{
-		$query = $this->db->prepare("SELECT COUNT(*) FROM `posts` WHERE `author_id` = :userid");
-		$query->bindParam(":userid", $userid, PDO::PARAM_INT);
-		
-		try	{		
-			$query->execute();
+    {
+        $query = $this->db->prepare("SELECT COUNT(*) FROM `posts` WHERE `author_id` = :userid");
+        $query->bindParam(":userid", $userid, PDO::PARAM_INT);
+        
+        try {       
+            $query->execute();
 
-			if($query->rowCount() == 1)	{
+            if($query->rowCount() == 1) {
                 return $posts_count = $query->fetchAll();
-			} 
-			else {
-				return false;
-			}
-			
-		} catch(PDOException $ex) {
-			die($ex->getMessage());
-		}
-	}
+            } 
+            else {
+                return false;
+            }
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
 
     /**
      * @param null   
@@ -61,6 +62,25 @@ class posts
         }
     }
 
+
+    /**
+     * @param null   
+     * get last post
+     */
+    public function get_last_post()
+    {
+        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id ORDER BY `posts`.id DESC LIMIT 1");
+        
+        try {       
+            $query->execute();
+
+            return $post_data = $query->fetchAll();
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
     /**
      * @param null   
      * get posts by offset
@@ -68,7 +88,7 @@ class posts
     public function get_posts_by_offset($start, $limit)
     {
         $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id
-                                        WHERE `posts`.status = 'public' ORDER BY `posts`.id 
+                                        ORDER BY `posts`.id 
                                         DESC LIMIT :limit OFFSET :start");
         $query->bindParam(":limit", intval($limit, 10), PDO::PARAM_INT);
         $query->bindParam(":start", intval($start, 10), PDO::PARAM_INT);
@@ -104,7 +124,7 @@ class posts
         try {
             $query->execute();
 
-            return true;
+            return $this->get_last_post();
 
         } catch (PDOException $ex) {
             die($ex->getMessage());

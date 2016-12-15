@@ -50,7 +50,7 @@ $(document).ready(function() {
     /**
      *  generate comment output
      */
-    function create_comment_placeholder(id, avatar, post_text, date_created, comment_number, like_number, full_name, slug){ 
+    function create_comment_placeholder(id, avatar, post_text, date_created, comment_number, like_number, full_name, slug, status){ 
         if(avatar != '') {
             avatar_img = '<img class="img-responsive thumbnail-image" src="'+ avatar +'" />';
         }
@@ -60,25 +60,50 @@ $(document).ready(function() {
 
         date_formated = moment(date_created).format('D.M.Y H:mm') + 'h';
 
-        return '<div class="row comment-container">' +
-                    '<div class="col-md-3 right-border text-center">' +
-                        avatar_img +
-                        '<a href="profile.php?user=' + slug + '">' + full_name + '</a>' + 
-                        '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
-                        '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number +             
-                    '</div>' +
-                    '<div class="col-md-9">' +
-                        '<strong>Objavljeno: </strong>' +
-                        date_formated + 
-                        '<hr>' +
-                        post_text +
-                        '<div class="text-center">' +
-                            '<a href="post.php?id=' + id + '">' +
-                                '<button class="inverse_main_small">Pregledaj <i class="fa fa-eye"></i></button>' +
-                            '</a>' +
+        if(status == 'public'){
+            return '<div class="row comment-container">' +
+                        '<div class="col-md-3 right-border text-center">' +
+                            avatar_img +
+                            '<a href="profile.php?user=' + slug + '">' + full_name + '</a>' + 
+                            '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
+                            '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number + '<br>' +
+                            '<i class="fa fa-eye" title="Javni komentar"></i>' +
                         '</div>' +
-                    '</div>' +
-                '</div>';
+                        '<div class="col-md-9">' +
+                            '<strong>Objavljeno: </strong>' +
+                            date_formated + 
+                            '<hr>' +
+                            post_text +
+                            '<div class="text-center">' +
+                                '<a href="post.php?id=' + id + '">' +
+                                    '<button class="inverse_main_small">Pregledaj <i class="fa fa-eye"></i></button>' +
+                                '</a>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+            }
+            else{
+            return '<div class="row comment-container comment-private">' +
+                        '<div class="col-md-3 right-border text-center">' +
+                            avatar_img +
+                            '<a href="profile.php?user=' + slug + '">' + full_name + '</a>' + 
+                            '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
+                            '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number + '<br>' +
+                            '<i class="fa fa-eye-slash" title="Privatni komentar"></i> Privatni komentar' +
+                        '</div>' +
+                        '<div class="col-md-9">' +
+                            '<strong>Objavljeno: </strong>' +
+                            date_formated + 
+                            '<hr>' +
+                            post_text +
+                            '<div class="text-center">' +
+                                '<a href="post.php?id=' + id + '">' +
+                                    '<button class="inverse_main_small">Pregledaj <i class="fa fa-eye"></i></button>' +
+                                '</a>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';                
+            }
     }
 
     /**
@@ -101,20 +126,43 @@ $(document).ready(function() {
                     $('#start').val(start + limit);
 
                     response.message.forEach(function(item, index){
+                        //is there any post before
                         if ($("div.comment-container").length){
-                            $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
-                                                                                    item['post_text'], item['date_created'], 
-                                                                                    item['comment_number'], item['like_number'], 
-                                                                                    item['full_name'], item['slug']));    
-                        }
+                            if(item['status'] == 'public'){
+                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                                                                        item['post_text'], item['date_created'], 
+                                                                                        item['comment_number'], item['like_number'], 
+                                                                                        item['full_name'], item['slug'], 'public'));                                 
+                            }
+                            else if(item['status'] == 'private' && (item['author_id'] == response.user_id)){
+                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                                                                        item['post_text'], item['date_created'], 
+                                                                                        item['comment_number'], item['like_number'], 
+                                                                                        item['full_name'], item['slug'], 'private'));                                 
+                            }
+                            else{
+                                return;
+                            }
+                        } //looks like not
                         else{
-                            $("div.container-comments").html(create_comment_placeholder(item['id'], item['avatar'], 
-                                                                                    item['post_text'], item['date_created'], 
-                                                                                    item['comment_number'], item['like_number'], 
-                                                                                    item['full_name'], item['slug']));
+                            if(item['status'] == 'public'){
+                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                                                                        item['post_text'], item['date_created'], 
+                                                                                        item['comment_number'], item['like_number'], 
+                                                                                        item['full_name'], item['slug'], 'public'));                                 
+                            }
+                            else if(item['status'] == 'private' && (item['author_id'] == response.user_id)){
+                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                                                                        item['post_text'], item['date_created'], 
+                                                                                        item['comment_number'], item['like_number'], 
+                                                                                        item['full_name'], item['slug'], 'private'));                                 
+                            }
+                            else{
+                                return;
+                            }
                         }
 
-                        $("div.ontainer-comments:last").hide().fadeIn(1000);
+                        $("div.container-comments:last").hide().fadeIn(1000);
                     });
 
                     $("html, body").animate({ scrollTop: $(document).height() - $(window).height() }, 500, 'linear');
@@ -142,11 +190,102 @@ $(document).ready(function() {
                 }
             },
             error: function(response, textStatus, jqXHR) {
-                console.log(response.status);
-                console.log(response.message);
+                $("#notification-data").attr("class", "notification-container failure-container");
+                $("#notification-data").text("Dogodila se greška. Pokušajte kasnije.").fadeIn(2000);
+                console.log(response);
+
+                setTimeout(function(){
+                    $("#notification-data").attr("class", "notification-container");
+                    $("#notification-data").empty();
+                }, 3000);
             }
         });
-    }    
+    }   
+
+    /**
+     *  load more posts
+     */
+    function new_post_create(data, redirect, redirectLocation){
+        $.ajax({
+            type: 'POST',
+            url: 'ajax_functions.php',
+            dataType: 'json',
+            data: data,
+            success: function(response, textStatus, jqXHR) {
+                if(response.status == 0){
+                    $("#notification-data").attr("class", "notification-container success-container");
+                    $("#notification-data").text(response.message).fadeIn(2000);
+                        //is there any post before
+                    if ($("div.comment-container").length){
+                        if(response.post_data['status'] == 'public'){
+                            $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                                                                                    response.post_data['post_text'], response.post_data['date_created'], 
+                                                                                    response.post_data['comment_number'], response.post_data['like_number'], 
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'public'));                                 
+                        }
+                        else if(response.post_data['status'] == 'private' && (response.post_data['author_id'] == response.user_id)){
+                              $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                                                                                    response.post_data['post_text'], response.post_data['date_created'], 
+                                                                                    response.post_data['comment_number'], response.post_data['like_number'], 
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'private'));                            
+                        }
+                        else{
+                            return;
+                        }
+                    } //looks like not
+                    else{
+                        if(response.post_data['status'] == 'public'){
+                            $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                                                                                    response.post_data['post_text'], response.post_data['date_created'], 
+                                                                                    response.post_data['comment_number'], response.post_data['like_number'], 
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'public'));                               
+                        }
+                        else if(response.post_data['status'] == 'private' && (response.post_data['author_id'] == response.user_id)){
+                            $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                                                                                    response.post_data['post_text'], response.post_data['date_created'], 
+                                                                                    response.post_data['comment_number'], response.post_data['like_number'], 
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'private'));                             
+                        }
+                        else{
+                            return;
+                        }
+                    }             
+
+                    $("#new-post-textarea").val('');
+
+                    setTimeout(function(){
+                        $("#notification-data").attr("class", "notification-container");
+                        $("#notification-data").empty();
+                    }, 3000);
+
+                    if(redirect === true && redirectLocation !== ""){
+                        setTimeout(function(){
+                            window.location.replace(redirectLocation);
+                        }, 1500);
+                    }
+                }
+                else{
+                    $("#notification-data").attr("class", "notification-container failure-container");
+                    $("#notification-data").text(response.message).fadeIn(2000);
+
+                    setTimeout(function(){
+                        $("#notification-data").attr("class", "notification-container");
+                        $("#notification-data").empty();
+                    }, 3000);
+                }
+            },
+            error: function(response, textStatus, jqXHR) {
+                $("#notification-data").attr("class", "notification-container failure-container");
+                $("#notification-data").text("Dogodila se greška. Pokušajte kasnije.").fadeIn(2000);
+                console.log(response);
+
+                setTimeout(function(){
+                    $("#notification-data").attr("class", "notification-container");
+                    $("#notification-data").empty();
+                }, 3000);
+            }
+        });
+    }
 
     /**
      *	user login
@@ -175,7 +314,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         var data = $("#new-post-form").serialize();        
-        data_post_sender(data, false, "");
+        new_post_create(data, false, "");
     });
 
     /**

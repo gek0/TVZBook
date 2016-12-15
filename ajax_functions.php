@@ -52,8 +52,9 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 	    }
 	    else{
 		  	$result = $posts->new_post($_SESSION[$session_id], $_POST["post_text"], $_POST["status"]);
-		  	if($result === true){
-		    	echo json_encode(array('status' => 0, 'message' => 'Post uspješno objavljen.'));
+		  	if($result == true){
+		    	echo json_encode(array('status' => 0, 'message' => 'Post uspješno objavljen.', 
+		    							'post_data' => call_user_func_array('array_merge', $result), 'user_id' => $_SESSION["id"]));
 		    }
 		    else{
 				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
@@ -68,10 +69,10 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 			$result = $posts->get_posts_by_offset($start, $limit);
 			if($result){
 				if(count($result) >= 5){
-					echo json_encode(array('status' => 0, 'message' => $result, 'count' => count($result)));
+					echo json_encode(array('status' => 0, 'message' => $result, 'count' => count($result), 'user_id' => $_SESSION["id"]));
 				}
 		    	else{
-		    		echo json_encode(array('status' => 0, 'message' => $result, 'count' => count($result), 'extra_message' => 'Dostigli ste kraj.'));
+		    		echo json_encode(array('status' => 0, 'message' => $result, 'count' => count($result), 'extra_message' => 'Dostigli ste kraj.', 'user_id' => $_SESSION["id"]));
 		    	}
 		    }
 		    else{

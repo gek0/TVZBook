@@ -74,7 +74,7 @@ if($session->session_test() === true){
             <div class="col-md-9 posts-section">
                 <div class="new-comment">
                     <form action="" method="POST" name="new-post" id="new-post-form" role="form">
-                        <textarea name="post_text" placeholder="Na umu mi je..." required></textarea>
+                        <textarea name="post_text" id="new-post-textarea" placeholder="Na umu mi je..." required></textarea>
 
                         <div class="text-center">
                             <input type="radio" name="status" value="public" checked> JAVNI post (svi vide)<br>
@@ -93,30 +93,63 @@ if($session->session_test() === true){
                 <div class="comments-list">
                     <?php
                         foreach ($posts_data as $post) {
-                            echo '<div class="row comment-container">
-                                    <div class="col-md-3 right-border text-center">';
-                                        if(!empty($post['avatar']))
-                                            echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
-                                        else
-                                            echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
+                            if($post['status'] == 'public'){
+                                    echo '<div class="row comment-container">
+                                            <div class="col-md-3 right-border text-center">';
+                                                if(!empty($post['avatar']))
+                                                    echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
+                                                else
+                                                    echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
-                                            echo "<a href='profile.php?user=".$post['slug']."'>".$post['full_name']."</a>";
+                                                    echo "<a href='profile.php?user=".$post['slug']."'>".$post['full_name']."</a>";
 
-                                            echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
-                                            echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];
-                            echo '  </div>
-                                        <div class="col-md-9">
-                                            <strong>Objavljeno: </strong>';
-                                            echo date("d.m.Y H:m", strtotime($post['date_created']))."h<hr>";
-                                            echo $post["post_text"];
+                                                    echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
+                                                    echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];
+                                                    echo "<br><i class='fa fa-eye' title='Javni komentar'></i>";
+                                    echo '  </div>
+                                                <div class="col-md-9">
+                                                    <strong>Objavljeno: </strong>';
+                                                    echo date("d.m.Y H:m", strtotime($post['date_created']))."h<hr>";
+                                                    echo $post["post_text"];
 
-                                            echo "<div class='text-center'>
-                                                        <a href='post.php?id=".$post[0]."'>
-                                                            <button class='inverse_main_small'>Pregledaj <i class='fa fa-eye'></i></button>
-                                                        </a>
-                                                    </div>";
-                            echo '  </div>
-                                    </div>'; 
+                                                    echo "<div class='text-center'>
+                                                                <a href='post.php?id=".$post[0]."'>
+                                                                    <button class='inverse_main_small'>Pregledaj <i class='fa fa-eye'></i></button>
+                                                                </a>
+                                                            </div>";
+                                    echo '  </div>
+                                            </div>'; 
+                            }
+                            else if($post['status'] == 'private' && $userid == $post['author_id']){
+                                    echo '<div class="row comment-container comment-private">
+                                            <div class="col-md-3 right-border text-center">';
+                                                if(!empty($post['avatar']))
+                                                    echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
+                                                else
+                                                    echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
+
+                                                    echo "<a href='profile.php?user=".$post['slug']."'>".$post['full_name']."</a>";
+
+                                                    echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
+                                                    echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];
+                                                    echo "<br><i class='fa fa-eye-slash' title='Privatni komentar'></i> Privatni komentar";
+                                    echo '  </div>
+                                                <div class="col-md-9">
+                                                    <strong>Objavljeno: </strong>';
+                                                    echo date("d.m.Y H:m", strtotime($post['date_created']))."h<hr>";
+                                                    echo $post["post_text"];
+
+                                                    echo "<div class='text-center'>
+                                                                <a href='post.php?id=".$post[0]."'>
+                                                                    <button class='inverse_main_small'>Pregledaj <i class='fa fa-eye'></i></button>
+                                                                </a>
+                                                            </div>";
+                                    echo '  </div>
+                                            </div>'; 
+                                }
+                                else{                                    
+                                    continue;
+                                }
                         }
                     ?>
 
