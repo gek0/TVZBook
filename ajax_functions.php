@@ -31,6 +31,9 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 	    else if($_POST["password"] != $_POST["password_again"]){
 	    	echo json_encode(array('status' => 1, 'message' => 'Unjete lozinke nisu iste.'));	
 	    }
+	    else if(!preg_match("/@tvz.hr/i", $_POST["email"])){
+	    	echo json_encode(array('status' => 1, 'message' => 'Unjeta e-mail adresa nije važeća. Samo TVZ -email dopušten.'));	
+	    }
 	    else{
 		  	$result = $users->register($_SERVER['REMOTE_ADDR'], $_POST["full_name"], $_POST["username"], 
 										$_POST["password"], $_POST["password_again"], $_POST["email"], $_POST["phone_number"]);

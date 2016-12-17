@@ -25,6 +25,7 @@ require_once ('inc/header.php');
 		</div>
 		<div class="form">
 			<h2>Registracija</h2>
+			<span class="small-notif">Samo <strong>@tvz</strong> e-mail adrese dopuštene.</span><br>
 			<form action="" method="POST" name="register" id="register-form" role="form">
 		    	<input type="text" name="full_name" placeholder="Ime i prezime" required>
 				<input type="text" name="username" placeholder="Korisničko ime" required>

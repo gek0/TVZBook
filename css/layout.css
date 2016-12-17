@@ -164,6 +164,9 @@ button.inverse_main_small{
     margin-top: 1em;
     display: block;
 }
+.small-notif{
+    font-size: .85em;
+}
 
 .notification-container{
     width: 80%;
