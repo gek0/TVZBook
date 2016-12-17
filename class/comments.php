@@ -71,6 +71,7 @@ class comments
     {
         $query = $this->db->prepare("SELECT `comments`.*, `users`.id, `users`.slug, `users`.full_name, `users`.avatar FROM `comments`
         								INNER JOIN `users` ON `comments`.author_id = `users`.id
+        								WHERE `comments`.post_id = :post_id
                                         ORDER BY `comments`.id DESC");
         $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
         

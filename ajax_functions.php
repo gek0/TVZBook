@@ -88,7 +88,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 	    break;
 	case 'new-comment':
 	  	if(empty($_POST["comment_text"]) || empty($_POST["post_id"])){
-	  		echo json_encode(array('status' => 1, 'message' => 'Sva polja su obavezna.'));	
+	  		echo json_encode(array('status' => 1, 'message' => 'Tekst komentara ne može biti prazan.'));	
 	  	}
 	    else if(!$posts->post_exists($_POST["post_id"])){
 	    	echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	

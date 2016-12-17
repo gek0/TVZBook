@@ -75,9 +75,10 @@ class posts
      */
     public function get_posts_for_user($userid)
     {
-        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id 
-                                            WHERE `users`.id = :userid 
-                                            ORDER BY `posts`.id DESC");
+        $query = $this->db->prepare("SELECT `posts`.*, `users`.id, `users`.slug, `users`.full_name, `users`.avatar FROM `posts` 
+                                        INNER JOIN `users` ON `posts`.author_id = `users`.id 
+                                        WHERE `users`.id = :userid 
+                                        ORDER BY `posts`.id DESC");
         $query->bindParam(":userid", $userid, PDO::PARAM_INT);
         
         try {       
@@ -97,7 +98,8 @@ class posts
      */
     public function get_last_post()
     {
-        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id 
+        $query = $this->db->prepare("SELECT `posts`.*, `users`.id, `users`.slug, `users`.full_name, `users`.avatar FROM `posts` 
+                                        INNER JOIN `users` ON `posts`.author_id = `users`.id 
                                         ORDER BY `posts`.id DESC LIMIT 1");
         
         try {       
@@ -116,7 +118,8 @@ class posts
      */
     public function get_post($post_id)
     {
-        $query = $this->db->prepare("SELECT * FROM `posts` INNER JOIN `users` ON `posts`.author_id = `users`.id 
+        $query = $this->db->prepare("SELECT `posts`.*, `users`.id, `users`.slug, `users`.full_name, `users`.avatar FROM `posts` 
+                                        INNER JOIN `users` ON `posts`.author_id = `users`.id 
                                         WHERE `posts`.id = :post_id
                                         ORDER BY `posts`.id DESC LIMIT 1");
         $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
