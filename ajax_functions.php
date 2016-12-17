@@ -86,6 +86,30 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 			echo json_encode(array('status' => 1, 'message' => 'Dogodila se greška.'));	
 		}
 	    break;
+	case 'new-comment':
+	  	if(empty($_POST["comment_text"]) || empty($_POST["post_id"])){
+	  		echo json_encode(array('status' => 1, 'message' => 'Sva polja su obavezna.'));	
+	  	}
+	    else if(!$posts->post_exists($_POST["post_id"])){
+	    	echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	
+	    }
+	    else{
+		  	$result = $comments->new_comment($_SESSION[$session_id], $_POST["post_id"], $_POST["comment_text"]);
+		  	if($result == true){
+		  		//update comments number if all ok
+            	if($posts->update_comments_num($_POST["post_id"])){
+	 		    	echo json_encode(array('status' => 0, 'message' => 'Komentar uspješno objavljen.', 
+			    							'comment_data' => call_user_func_array('array_merge', $result), 'user_id' => $_SESSION["id"]));           		
+            	}
+				else{
+					echo json_encode(array('status' => 1, 'message' => 'Dogodila se greška.'));	
+				}
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
+		    }
+		}
+	    break;
 	default:
 	    return false;
 	}

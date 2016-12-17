@@ -7,6 +7,7 @@
 *                   get post
 *                   check if post exists
 *                   post count for certain user
+*                   update comment count on post
 *
 */
 
@@ -179,6 +180,25 @@ class posts
         } catch (PDOException $ex) {
             die($ex->getMessage());
         }
+    }
+
+    /**
+     * @param $post_id
+     * update comment counter for post
+     */
+    public function update_comments_num($post_id)
+    {
+        $query = $this->db->prepare("UPDATE `posts` SET `comment_number` = `comment_number` + 1 WHERE `id` = :post_id");
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+
+        try {       
+            $query->execute();
+
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }       
     }
 
 }

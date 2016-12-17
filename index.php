@@ -65,11 +65,15 @@ if($session->session_test() === true){
                     <button class="inverse_main" id="view-wall-button">Moj profil <i class="fa fa-user"></i></button>
                 </a>                
                 <a href="profile_settings.php">
-                    <button class="inverse_main" id="view-settings-button">Uredi profil <i class="fa fa-cogs"></i></button>
+                    <button class="inverse_main" id="view-settings-button">Uredi profil <i class="fa fa-cogs fa-spin"></i></button>
                 </a>
                 <a href="index.php?logout">
-                    <button class="inverse_main" id="logout-button">Odlogiraj se <i class="fa fa-sign-out"></i></button>
+                    <button class="inverse_main" id="logout-button">Odjava <i class="fa fa-sign-out"></i></button>
                 </a>
+                <hr>
+                <a href="stats.php">
+                    <button class="inverse_main" id="stats-button">Statistika <i class="fa fa-pie-chart"></i></button>
+                </a>                
             </div>
             <div class="col-md-9 posts-section">
                 <div class="new-post">

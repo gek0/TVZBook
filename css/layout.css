@@ -44,7 +44,7 @@ body {
     position: relative;
     padding: .25em;
     border-top: 5px solid #33b5e5;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .15);
     margin: 0 auto;
 }
 .form-module-wider{
@@ -164,6 +164,15 @@ button.inverse_main_small{
     margin-top: 1em;
     display: block;
 }
+
+button.condensed-like{
+    padding: .20em;   
+    max-width: 50px; 
+}
+button.condensed-like:hover{
+    color: #e02504;
+    border: 1px solid #e02504;
+}
 .small-notif{
     font-size: .85em;
 }
@@ -220,7 +229,7 @@ a:hover{
     background: #ffffff;
     padding: .25em;
     border-top: 5px solid #33b5e5;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .15);
     margin: 1em auto;
     margin-top: 5em;
     padding: 1em;
@@ -256,6 +265,12 @@ span.notif-borderless{
 .text-center{
     text-align: center;
 }
+.text-right{
+    text-align: right;
+}
+.text-left{
+    text-align: left;
+}
 
 .new-post,
 .posts-list{
@@ -270,7 +285,7 @@ span.notif-borderless{
     height: auto;
     margin: 2em auto;
     padding: .5em;
-    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .15);
 }
 .post-private{
     background-color: rgba(168, 179, 196, .15);
@@ -280,16 +295,16 @@ span.notif-borderless{
 }
 .new-comment,
 .comments-list{
-    width: 55%;
+    width: 85%;
     margin: 1em auto;
 }
-.comment-containere{
-    border: 1px dashed #33b5e5;
+.comment-container{
+    border: none;
     width: 100%;
     height: auto;
     margin: 2em auto;
     padding: .5em;
-    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .15);
 }
 
 h1.main-header{

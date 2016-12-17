@@ -29,6 +29,9 @@ if($session->session_test() === true){
                 echo '</script>';
                 die;  
             }
+
+            //get comments
+            $comments_data = $comments->get_comments($post_id);
     	}
     	else{
 			echo '<script type="text/javascript">';
@@ -76,11 +79,12 @@ if($session->session_test() === true){
 
                                 echo "<a href='profile.php?user=".$post_data['slug']."'>".$post_data['full_name']."</a>";
 
-                                echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post_data['like_number']." | ";
-                                echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post_data['comment_number'];
+                                echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> <span id='like-number-container'>".$post_data['like_number']."</span> | ";
+                                echo "<i class='fa fa-pencil' title='Broj komentara'></i> <span id='comment-number-container'>".$post_data['comment_number']."</span>";
                                 echo "<br><i class='fa fa-eye' title='Javna objava'></i>";
+                                echo "<hr><button class='inverse_main condensed-like' title='Sviđa mi se ova objava' id='give-like-button' data-value='".$post_id."' data-request-type='post-like'><i class='fa fa-heart'></i></button>";
                                 echo '  </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-9 text-left">
                                             <strong>Objavljeno: </strong>';
                                             echo date("d.m.Y H:m", strtotime($post_data['date_created']))."h<hr>";
                                             echo $post_data["post_text"];
@@ -101,7 +105,7 @@ if($session->session_test() === true){
                                                 echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post_data['comment_number'];
                                                 echo "<br><i class='fa fa-eye-slash' title='Privatna objava'></i> Privatna objava";
                                     echo '  </div>
-                                                <div class="col-md-9">
+                                                <div class="col-md-9 text-left">
                                                     <strong>Objavljeno: </strong>';
                                                     echo date("d.m.Y H:m", strtotime($post_data['date_created']))."h<hr>";
                                                     echo $post_data["post_text"];
@@ -110,8 +114,45 @@ if($session->session_test() === true){
                     }
                 ?>
 
-                <div class="comments-list">
+                <div class="new-comment">
+                    <form action="" method="POST" name="new-comment" id="new-comment-form" role="form">
+                        <textarea name="comment_text" id="new-comment-textarea" placeholder="Želim ti reći..." required></textarea>
+                        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+                        <input type="hidden" name="request" value="new-comment">
 
+                        <button class="inverse_main" id="new-comment-button">Objavi <i class="fa fa-pencil"></i></button>
+                    </form>
+
+                    <div id="notification-data" class="notification-container"></div> 
+                </div>
+
+                <hr>
+                <div id="notification-data-load" class="notification-container"></div>
+                <div class="comments-list">
+                    <?php
+                        if(!empty($comments_data)){
+                            foreach ($comments_data as $comment) {
+                                echo '<div class="row comment-container">
+                                        <div class="col-md-3 right-border text-center">';
+                                            if(!empty($comment['avatar']))
+                                                echo "<img class='img-responsive thumbnail-image' src='".$comment['avatar']."' />";                                        
+                                            else
+                                                echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
+
+                                                echo "<a href='profile.php?user=".$comment['slug']."'>".$comment['full_name']."</a>";
+                                echo '  </div>
+                                        <div class="col-md-9 text-left">
+                                            <strong>Objavljeno: </strong>';
+                                            echo date("d.m.Y H:m", strtotime($comment['date_created']))."h<hr>";
+                                            echo $comment["comment_text"];
+                                echo '  </div>
+                                      </div>'; 
+                            }
+                        }
+                        else{
+                            echo "<h5 class='text-center' id='no-comments'>Objava nema komentara. <br>Zašto ne bi dodao/la jedan? :)</h5>";
+                        }
+                    ?>
                 </div>
 		</div>
 	</div>
