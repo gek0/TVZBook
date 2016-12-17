@@ -254,13 +254,14 @@ span.notif-borderless{
     text-align: center;
 }
 
-.new-comment,
-.comments-list{
+.new-post,
+.posts-list{
     width: 75%;
     margin: 1em auto;
 }
-.comment-container,
-.comment-private{
+.post-container,
+.post-private,
+.post-container-unbordered{
     border: 1px dashed #33b5e5;
     width: 100%;
     height: auto;
@@ -268,8 +269,24 @@ span.notif-borderless{
     padding: .5em;
     box-shadow: 0 0 3px rgba(0, 0, 0, .1);
 }
-.comment-private{
+.post-private{
     background-color: rgba(168, 179, 196, .15);
+}
+.post-container-unbordered{
+    border: none;
+}
+.new-comment,
+.comments-list{
+    width: 55%;
+    margin: 1em auto;
+}
+.comment-containere{
+    border: 1px dashed #33b5e5;
+    width: 100%;
+    height: auto;
+    margin: 2em auto;
+    padding: .5em;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
 }
 
 h1.main-header{

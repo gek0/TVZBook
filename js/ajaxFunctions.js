@@ -48,9 +48,9 @@ $(document).ready(function() {
     }
 
     /**
-     *  generate comment output
+     *  generate post output
      */
-    function create_comment_placeholder(id, avatar, post_text, date_created, comment_number, like_number, full_name, slug, status){ 
+    function create_post_placeholder(id, avatar, post_text, date_created, comment_number, like_number, full_name, slug, status){ 
         if(avatar != '') {
             avatar_img = '<img class="img-responsive thumbnail-image" src="'+ avatar +'" />';
         }
@@ -61,13 +61,13 @@ $(document).ready(function() {
         date_formated = moment(date_created).format('D.M.Y H:mm') + 'h';
 
         if(status == 'public'){
-            return '<div class="row comment-container">' +
+            return '<div class="row post-container">' +
                         '<div class="col-md-3 right-border text-center">' +
                             avatar_img +
                             '<a href="profile.php?user=' + slug + '">' + full_name + '</a>' + 
                             '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
                             '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number + '<br>' +
-                            '<i class="fa fa-eye" title="Javni komentar"></i>' +
+                            '<i class="fa fa-eye" title="Javna objava"></i>' +
                         '</div>' +
                         '<div class="col-md-9">' +
                             '<strong>Objavljeno: </strong>' +
@@ -83,13 +83,13 @@ $(document).ready(function() {
                     '</div>';
             }
             else{
-            return '<div class="row comment-container comment-private">' +
+            return '<div class="row cpost-container post-private">' +
                         '<div class="col-md-3 right-border text-center">' +
                             avatar_img +
                             '<a href="profile.php?user=' + slug + '">' + full_name + '</a>' + 
                             '<br><i class="fa fa-heart" title="Broj sviđanja"></i> ' + like_number  + ' | ' +
                             '<i class="fa fa-pencil" title="Broj komentara"></i> ' + comment_number + '<br>' +
-                            '<i class="fa fa-eye-slash" title="Privatni komentar"></i> Privatni komentar' +
+                            '<i class="fa fa-eye-slash" title="Privatna objava"></i> Privatna objava' +
                         '</div>' +
                         '<div class="col-md-9">' +
                             '<strong>Objavljeno: </strong>' +
@@ -127,15 +127,15 @@ $(document).ready(function() {
 
                     response.message.forEach(function(item, index){
                         //is there any post before
-                        if ($("div.comment-container").length){
+                        if ($("div.post-container").length){
                             if(item['status'] == 'public'){
-                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                $("div.post-container:last").after(create_post_placeholder(item[0], item['avatar'], 
                                                                                         item['post_text'], item['date_created'], 
                                                                                         item['comment_number'], item['like_number'], 
                                                                                         item['full_name'], item['slug'], 'public'));                                 
                             }
                             else if(item['status'] == 'private' && (item['author_id'] == response.user_id)){
-                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                $("div.post-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
                                                                                         item['post_text'], item['date_created'], 
                                                                                         item['comment_number'], item['like_number'], 
                                                                                         item['full_name'], item['slug'], 'private'));                                 
@@ -146,13 +146,13 @@ $(document).ready(function() {
                         } //looks like not
                         else{
                             if(item['status'] == 'public'){
-                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                $("div.post-container:last").after(create_post_placeholder(item[0], item['avatar'], 
                                                                                         item['post_text'], item['date_created'], 
                                                                                         item['comment_number'], item['like_number'], 
                                                                                         item['full_name'], item['slug'], 'public'));                                 
                             }
                             else if(item['status'] == 'private' && (item['author_id'] == response.user_id)){
-                                $("div.comment-container:last").after(create_comment_placeholder(item[0], item['avatar'], 
+                                $("div.post-container:last").after(create_post_placeholder(item[0], item['avatar'], 
                                                                                         item['post_text'], item['date_created'], 
                                                                                         item['comment_number'], item['like_number'], 
                                                                                         item['full_name'], item['slug'], 'private'));                                 
@@ -162,7 +162,7 @@ $(document).ready(function() {
                             }
                         }
 
-                        $("div.container-comments:last").hide().fadeIn(1000);
+                        $("div.post-container:last").hide().fadeIn(1000);
                     });
 
                     $("html, body").animate({ scrollTop: $(document).height() - $(window).height() }, 500, 'linear');
@@ -216,18 +216,22 @@ $(document).ready(function() {
                     $("#notification-data").attr("class", "notification-container success-container");
                     $("#notification-data").text(response.message).fadeIn(2000);
                         //is there any post before
-                    if ($("div.comment-container").length){
+                    if ($("div.post-container").length){
                         if(response.post_data['status'] == 'public'){
-                            $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                            var firstComment = $("div.postt-container").first(); 
+                            var newComment = $(create_post_placeholder(response.post_data[0], response.post_data['avatar'], 
                                                                                     response.post_data['post_text'], response.post_data['date_created'], 
                                                                                     response.post_data['comment_number'], response.post_data['like_number'], 
-                                                                                    response.post_data['full_name'], response.post_data['slug'], 'public'));                                 
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'public'));
+                            newComment.hide().insertBefore(firstComment).fadeIn(2000);                                                          
                         }
                         else if(response.post_data['status'] == 'private' && (response.post_data['author_id'] == response.user_id)){
-                              $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                            var firstComment = $("div.post-container").first(); 
+                            var newComment = $(create_post_placeholder(response.post_data[0], response.post_data['avatar'], 
                                                                                     response.post_data['post_text'], response.post_data['date_created'], 
                                                                                     response.post_data['comment_number'], response.post_data['like_number'], 
-                                                                                    response.post_data['full_name'], response.post_data['slug'], 'private'));                            
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'private'));
+                            newComment.hide().insertBefore(firstComment).fadeIn(2000);                           
                         }
                         else{
                             return;
@@ -235,16 +239,20 @@ $(document).ready(function() {
                     } //looks like not
                     else{
                         if(response.post_data['status'] == 'public'){
-                            $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                            var commentContainer = $("div.posts-list"); 
+                            var newComment = $(create_post_placeholder(response.post_data[0], response.post_data['avatar'], 
                                                                                     response.post_data['post_text'], response.post_data['date_created'], 
                                                                                     response.post_data['comment_number'], response.post_data['like_number'], 
-                                                                                    response.post_data['full_name'], response.post_data['slug'], 'public'));                               
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'public'));
+                            newComment.hide().prependTo(commentContainer).fadeIn(2000);                                  
                         }
                         else if(response.post_data['status'] == 'private' && (response.post_data['author_id'] == response.user_id)){
-                            $("div.comment-container:first").before(create_comment_placeholder(response.post_data[0], response.post_data['avatar'], 
+                            var commentContainer = $("div.posts-list"); 
+                            var newComment = $(create_post_placeholder(response.post_data[0], response.post_data['avatar'], 
                                                                                     response.post_data['post_text'], response.post_data['date_created'], 
                                                                                     response.post_data['comment_number'], response.post_data['like_number'], 
-                                                                                    response.post_data['full_name'], response.post_data['slug'], 'private'));                             
+                                                                                    response.post_data['full_name'], response.post_data['slug'], 'private'));
+                            newComment.hide().prependTo(commentContainer).fadeIn(2000);                              
                         }
                         else{
                             return;

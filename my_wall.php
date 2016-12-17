@@ -76,11 +76,11 @@ if($session->session_test() === true){
 
                 <hr>
                 
-                <div class="comments-list">
+                <div class="posts-list">
                     <?php
                         foreach ($posts_data as $post) {
                             if($post['status'] == 'public'){
-                                    echo '<div class="row comment-container">
+                                    echo '<div class="row post-container">
                                             <div class="col-md-3 right-border text-center">';
                                                 if(!empty($post['avatar']))
                                                     echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
@@ -91,7 +91,7 @@ if($session->session_test() === true){
 
                                                     echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
                                                     echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];
-                                                    echo "<br><i class='fa fa-eye' title='Javni komentar'></i>";
+                                                    echo "<br><i class='fa fa-eye' title='Javna objava'></i>";
                                     echo '  </div>
                                                 <div class="col-md-9">
                                                     <strong>Objavljeno: </strong>';
@@ -107,7 +107,7 @@ if($session->session_test() === true){
                                             </div>'; 
                             }
                             else if($post['status'] == 'private' && ($userid == $post['author_id'])){
-                                    echo '<div class="row comment-container comment-private">
+                                    echo '<div class="row post-container post-private">
                                             <div class="col-md-3 right-border text-center">';
                                                 if(!empty($post['avatar']))
                                                     echo "<img class='img-responsive thumbnail-image' src='".$post['avatar']."' />";                                        
@@ -118,7 +118,7 @@ if($session->session_test() === true){
 
                                                     echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post['like_number']." | ";
                                                     echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post['comment_number'];
-                                                    echo "<br><i class='fa fa-eye-slash' title='Privatni komentar'></i> Privatni komentar";
+                                                    echo "<br><i class='fa fa-eye-slash' title='Privatna objava'></i> Privatna objava";
                                     echo '  </div>
                                                 <div class="col-md-9">
                                                     <strong>Objavljeno: </strong>';
