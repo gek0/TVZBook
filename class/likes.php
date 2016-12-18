@@ -3,6 +3,7 @@
 *   likes class:	initialize likes for post 
 *					add like to post
 *					likes for single post
+*                   likes count for user
 *
 */
 
@@ -73,6 +74,24 @@ class likes
             $query->execute();
 
             return $likes_data = $query->fetchAll();
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $user_id
+     *  get likes count for user
+     */
+    public function count_likes_for_user($user_id) 
+    {
+        $query = $this->db->prepare("SELECT * FROM `likes`");
+        
+        try {       
+            $query->execute();
+
+            return $likes_data = array_merge($query->fetchAll());
             
         } catch(PDOException $ex) {
             die($ex->getMessage());

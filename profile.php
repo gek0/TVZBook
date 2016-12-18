@@ -21,6 +21,25 @@ if($session->session_test() === true){
     		//get user posts and comments count
 		    $posts_count = $posts->post_count($user_data['id']);
 		    $comments_count = $comments->comment_count($user_data['id']);
+            
+            //get user likes count            
+            $likes_data = $likes->count_likes_for_user($user_data['id']);
+            $likes_count = 0;
+            $temp_like_arr = [];
+
+            foreach($likes_data as $like){
+                $temp_like_arr = explode(" ", $like["users_list"]);
+
+                // search only posts with likes
+                if(!empty($temp_like_arr[1])){
+                    if(array_search($user_data['id'], $temp_like_arr)){
+                        $likes_count++;      
+                    }
+                    else{
+                        continue;
+                    }
+                }
+            }
     	}
     	else{
 			echo '<script type="text/javascript">';
@@ -69,6 +88,7 @@ if($session->session_test() === true){
                    	echo "<p class='user_stats'>Korisnika se može kontaktirati na e-mail adresu <a href='mailto:".$user_data['email']."'><strong>".$user_data['email']."</strong></a>.</p>";
                    	echo "<p class='user_stats'>Registrirao se na ".SITE_NAME." <strong>".date("d.m.Y.", strtotime($user_data['registration_date']))."</strong></p>";
                    	echo "<p class='user_stats'>Za to vrijeme je uspio napisati <strong>".$posts_count[0][0]."</strong> postova i <strong>".$comments_count[0][0]."</strong> komentara.</p>";
+                    echo "<p class='user_stats'>Svidjelo mu se <strong>".$likes_count."</strong> objava.</p>";                    
                    	echo "<p class='user_stats'>Zadnje je viđen online <strong>".date("d.m.Y. \u H:i:s", strtotime($user_data['last_online']))."</strong></p>";
                 ?>
 
