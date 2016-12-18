@@ -8,6 +8,7 @@
 *                   check if post exists
 *                   post count for certain user
 *                   update comment count on post
+*                   update like count on post
 *
 */
 
@@ -192,6 +193,25 @@ class posts
     public function update_comments_num($post_id)
     {
         $query = $this->db->prepare("UPDATE `posts` SET `comment_number` = `comment_number` + 1 WHERE `id` = :post_id");
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+
+        try {       
+            $query->execute();
+
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }       
+    }
+
+    /**
+     * @param $post_id
+     * update like counter for post
+     */
+    public function update_likes_num($post_id)
+    {
+        $query = $this->db->prepare("UPDATE `posts` SET `like_number` = `like_number` + 1 WHERE `id` = :post_id");
         $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
 
         try {       

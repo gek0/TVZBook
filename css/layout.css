@@ -165,7 +165,8 @@ button.inverse_main_small{
     display: block;
 }
 
-button.condensed-like{
+button.condensed-like,
+button.condensed-like-disabled{
     padding: .20em;   
     max-width: 50px; 
 }

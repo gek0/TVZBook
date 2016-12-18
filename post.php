@@ -32,6 +32,10 @@ if($session->session_test() === true){
 
             //get comments
             $comments_data = $comments->get_comments($post_id);
+
+            //get likes
+            $likes_data = array_merge($likes->get_likes($post_id));
+            $users_liked = explode(" ", $likes_data[0]["users_list"]);
     	}
     	else{
 			echo '<script type="text/javascript">';
@@ -82,7 +86,21 @@ if($session->session_test() === true){
                                 echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> <span id='like-number-container'>".$post_data['like_number']."</span> | ";
                                 echo "<i class='fa fa-pencil' title='Broj komentara'></i> <span id='comment-number-container'>".$post_data['comment_number']."</span>";
                                 echo "<br><i class='fa fa-eye' title='Javna objava'></i>";
-                                echo "<hr><button class='inverse_main condensed-like' title='Sviđa mi se ova objava' id='give-like-button' data-value='".$post_id."' data-request-type='post-like'><i class='fa fa-heart'></i></button>";
+
+                                // author can like it  own post
+                                if($userid == $post_data["author_id"]){
+                                    echo "<hr><button class='inverse_main condensed-like-disabled' title='Ovo je tvoja objava' disabled><i class='fa fa-heart'></i></button>";
+                                }
+                                else{
+                                    // has the user already liked the post
+                                    if(array_search($userid, $users_liked)){
+                                        echo "<hr><button class='inverse_main condensed-like-disabled' title='Već ti se sviđa objava' disabled><i class='fa fa-heart'></i></button>";
+                                    }
+                                    else{
+                                        echo "<hr><button class='inverse_main condensed-like' title='Sviđa mi se ova objava' id='give-like-button' data-value='".$post_id."' data-request-type='post-like'><i class='fa fa-heart'></i></button>";
+                                    }
+                                }
+
                                 echo '  </div>
                                         <div class="col-md-9 text-left">
                                             <strong>Objavljeno: </strong>';

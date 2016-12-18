@@ -56,8 +56,14 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 	    else{
 		  	$result = $posts->new_post($_SESSION[$session_id], $_POST["post_text"], $_POST["status"]);
 		  	if($result == true){
-		    	echo json_encode(array('status' => 0, 'message' => 'Post uspješno objavljen.', 
-		    							'post_data' => call_user_func_array('array_merge', $result), 'user_id' => $_SESSION["id"]));
+		  		$likes_result = $likes->initialize_post_likes($result[0][0]);
+		  		if($likes_result == true){
+		  			echo json_encode(array('status' => 0, 'message' => 'Post uspješno objavljen.', 
+		    							'post_data' => call_user_func_array('array_merge', $result), 'user_id' => $_SESSION["id"]));	
+		  		}
+		    	else{
+		    		echo json_encode(array('status' => 1, 'message' => 'Dogodila se greška.'));	
+		    	}
 		    }
 		    else{
 				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
@@ -110,6 +116,29 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		    }
 		}
 	    break;
+	case 'post-like':
+		if(empty($_POST["post_id"]) || !$posts->post_exists($_POST["post_id"])){
+			echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	
+		}
+		else{
+			$user_id = " ".$_SESSION[$session_id]; // format users divided by space
+			$post_id = (int)$_POST["post_id"];
+
+			$result = $likes->add_like($user_id, $post_id);
+		  	if($result == true){
+		  		//update likes number if all ok
+            	if($posts->update_likes_num($post_id)){
+	 		    	echo json_encode(array('status' => 0, 'message' => 'Tvoje sviđanje objave je zabilježeno.'));           		
+            	}
+				else{
+					echo json_encode(array('status' => 1, 'message' => 'Dogodila se greška.'));	
+				}
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
+		    }			
+		}
+		break;
 	default:
 	    return false;
 	}

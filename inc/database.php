@@ -8,6 +8,7 @@ require_once ('class/session.php');
 require_once ('class/users.php');
 require_once ('class/posts.php');
 require_once ('class/comments.php');
+require_once ('class/likes.php');
 
 try{
 	$db = new PDO("mysql:host={$dbhost};dbname={$dbname};charset=utf8", $dbuser, $dbpass);
@@ -21,6 +22,7 @@ catch(PDOException $ex){
 $users = new users($db);
 $posts = new posts($db);
 $comments = new comments($db);
+$likes = new likes($db);
 $session = new session();
 
 //error/announce arrays
