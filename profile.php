@@ -85,11 +85,11 @@ if($session->session_test() === true){
                     }
 
                     echo "<hr><span><i class='fa fa-envelope'></i> | <i class='fa fa-calendar'></i> | <i class='fa fa-pencil'></i></span>";
-                   	echo "<p class='user_stats'>Korisnika se može kontaktirati na e-mail adresu <a href='mailto:".$user_data['email']."'><strong>".$user_data['email']."</strong></a>.</p>";
-                   	echo "<p class='user_stats'>Registrirao se na ".SITE_NAME." <strong>".date("d.m.Y.", strtotime($user_data['registration_date']))."</strong></p>";
-                   	echo "<p class='user_stats'>Za to vrijeme je uspio napisati <strong>".$posts_count[0][0]."</strong> postova i <strong>".$comments_count[0][0]."</strong> komentara.</p>";
+                    echo "<p class='user_stats'>Korisnika se može kontaktirati na e-mail adresu <a href='mailto:".$user_data['email']."'><strong>".$user_data['email']."</strong></a>.</p>";
+                    echo "<p class='user_stats'>Registrirao se na ".SITE_NAME." <strong>".date("d.m.Y.", strtotime($user_data['registration_date']))."</strong></p>";
+                    echo "<p class='user_stats'>Za to vrijeme je uspio napisati <strong>".$posts_count[0][0]."</strong> postova i <strong>".$comments_count[0][0]."</strong> komentara.</p>";
                     echo "<p class='user_stats'>Svidjelo mu se <strong>".$likes_count."</strong> objava.</p>";                    
-                   	echo "<p class='user_stats'>Zadnje je viđen online <strong>".date("d.m.Y. \u H:i:s", strtotime($user_data['last_online']))."</strong></p>";
+                    echo "<p class='user_stats'>Zadnje je viđen online <strong>".date("d.m.Y. \u H:i:s", strtotime($user_data['last_online']))."</strong></p>";
                 ?>
 
 		</div>

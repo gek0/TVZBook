@@ -4,6 +4,7 @@
 *					get comments for single post
 *					add new comment
 *					get last comment
+*                   delete comments for post
 *
 */
 
@@ -109,6 +110,24 @@ class comments
             return $this->get_last_comment();
 
         } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $post_id
+     * delete comments for post
+     */
+    public function post_comments_delete($post_id)
+    {
+        $query = $this->db->prepare("DELETE FROM `comments` WHERE `post_id` = :post_id");
+        $query->bindParam("post_id", $post_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
             die($ex->getMessage());
         }
     }

@@ -143,6 +143,79 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 	    return false;
 	}
 }
+else if($_SERVER["REQUEST_METHOD"] == 'GET' && isset($_GET['request'])){
+	$request = trim($_GET['request']);
+	$result = false;
+
+	function error_return(){
+		echo '<script type="text/javascript">';
+		echo 'setTimeout(function () { 
+				swal("Greška", "Dogodila se greška.", "error");
+			  }, 500);
+			  setTimeout(function () { 
+				window.location = "index.php";
+			  }, 3000);';
+		echo '</script>';
+		die;			
+	}
+
+	switch($request) {
+	  case 'delete-post':
+	  	require_once ('inc/header.php');
+
+		if(empty($_GET["post_id"]) || !$posts->post_exists($_GET["post_id"])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Post ne postoji.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "index.php";
+				  }, 3000);';
+			echo '</script>';
+			die;
+		}
+		else if(!$posts->is_user_post_author($_GET["post_id"], $_SESSION[$session_id])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Niste ovlašteni za ovu akciju.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "post.php?id='.$_GET["post_id"].'";
+				  }, 3000);';
+			echo '</script>';
+			die;			
+		}
+		else{
+			if($posts->post_delete($_GET["post_id"])){
+				if($comments->post_comments_delete($_GET["post_id"])){
+					if($likes->post_likes_delete($_GET["post_id"])){
+			            echo '<script type="text/javascript">';
+			            echo 'setTimeout(function () { 
+			                    swal("Uspjeh", "Vaša objava je obrisana.", "success");
+			                  }, 500);
+			                  setTimeout(function () { 
+			                    window.location = "index.php";
+			                  }, 3000);';
+			            echo '</script>';
+			            die; 
+					}
+					else{
+						error_return();
+					}
+				}
+				else{
+					error_return();
+				}
+			}
+			else{
+				error_return();			
+			}				
+		}	  
+		break;
+	default:
+	    return false;
+	}	
+}  
 else{
 	header("Location: index.php");
 	exit();

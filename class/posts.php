@@ -9,6 +9,8 @@
 *                   post count for certain user
 *                   update comment count on post
 *                   update like count on post
+*                   delete post
+*                   check if user is post author
 *
 */
 
@@ -32,6 +34,29 @@ class posts
     {
         $query = $this->db->prepare("SELECT `id` FROM `posts` WHERE `id` = :post_id LIMIT 1");
         $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+
+        try {
+            $query->execute();
+            if ($query->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $post_id
+     * check if user is post author
+     */
+    public function is_user_post_author($post_id, $author_id)
+    {
+        $query = $this->db->prepare("SELECT `id` FROM `posts` WHERE `id` = :post_id  AND `author_id` = :author_id LIMIT 1");
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+        $query->bindParam(":author_id", $author_id, PDO::PARAM_INT);
 
         try {
             $query->execute();
@@ -224,4 +249,21 @@ class posts
         }       
     }
 
+    /**
+     * @param $post_id
+     * delete post
+     */
+    public function post_delete($post_id)
+    {
+        $query = $this->db->prepare("DELETE FROM `posts` WHERE `id` = :post_id");
+        $query->bindParam("post_id", $post_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }
+    }
 }

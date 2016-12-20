@@ -127,7 +127,9 @@ textarea:focus{
 }
 button.main_button,
 button.inverse_main,
-button.inverse_main_small {
+button.inverse_main_small,
+button.delete,
+button.edit {
     cursor: pointer;
     display: block;
     background: #33b5e5;
@@ -163,6 +165,32 @@ button.inverse_main_small{
     max-width: 100px;
     margin-top: 1em;
     display: block;
+}
+
+button.delete {
+    background: #d61313;
+    border: 1px solid #ffffff;
+    max-width: 45px;
+    padding: .25em;
+    display: inline-block;
+}
+button.delete:hover{
+    background: #ffffff;
+    border: 1px solid #d83a3a;
+    color: #d61313;
+}
+
+button.edit {
+    background: #4ebf11;
+    border: 1px solid #ffffff;
+    max-width: 45px;
+    padding: .25em;
+    display: inline-block;
+}
+button.edit:hover{
+    background: #ffffff;
+    border: 1px solid #4ebf11;
+    color: #4ebf11;
 }
 
 button.condensed-like,

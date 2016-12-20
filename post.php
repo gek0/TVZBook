@@ -48,6 +48,47 @@ if($session->session_test() === true){
 			echo '</script>';
 			die;      		
     	}
+
+        // delete post
+        if(!empty($_GET['mode']) && ($_GET['mode'] == 'delete') && ($userid == $post_data['author_id'])){
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () {
+                        swal({
+                          title: "Jeste li sigurni?",
+                          text: "Ova akcija je nepovratna!",
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonText: "Da, obriši.",
+                          cancelButtonText: "Ne, odustani!",
+                          confirmButtonColor: "#12bc18",
+                          cancelButtonColor: "#c60d2c"
+                            }).then(function() {
+                                setTimeout(function () { 
+                                    window.location = "ajax_functions.php?request=delete-post&post_id='.$post_id.'";
+                                }, 500);
+                            }, function(dismiss) {
+                              if (dismiss === "cancel") {
+                                swal("Odustanak", "Vaša objava je sigurna :)", "error");
+                                setTimeout(function () { 
+                                    window.location = "post.php?id='.$post_id.'";
+                                }, 2000);
+                              }
+                        });
+                  }, 500);';
+            echo '</script>';
+            die;  
+        }
+        else if(!empty($_GET['mode']) && ($_GET['mode'] == 'delete') && ($userid != $post_data['author_id'])){
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () { 
+                    swal("Greška", "Niste ovlašteni za ovu akciju.", "error");
+                  }, 500);
+                  setTimeout(function () { 
+                    window.location = "post.php?id='.$post_id.'";
+                  }, 3000);';
+            echo '</script>';
+            die;              
+        }
     }
     else{
 		echo '<script type="text/javascript">';
@@ -89,7 +130,7 @@ if($session->session_test() === true){
 
                                 // author can like it  own post
                                 if($userid == $post_data["author_id"]){
-                                    echo "<hr><button class='inverse_main condensed-like-disabled' title='Ovo je tvoja objava' disabled><i class='fa fa-heart'></i></button>";
+                                    echo "<hr><a href='post.php?id=".$post_id."&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
                                 }
                                 else{
                                     // has the user already liked the post
@@ -104,8 +145,8 @@ if($session->session_test() === true){
                                 echo '  </div>
                                         <div class="col-md-9 text-left">
                                             <strong>Objavljeno: </strong>';
-                                            echo date("d.m.Y H:m", strtotime($post_data['date_created']))."h<hr>";
-                                            echo $post_data["post_text"];
+                                            echo date("d.m.Y H:m", strtotime($post_data['date_created']))."h";
+                                            echo "<hr>".$post_data["post_text"];
                                 echo '  </div>
                                       </div>'; 
                             }
@@ -122,6 +163,8 @@ if($session->session_test() === true){
                                                 echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post_data['like_number']." | ";
                                                 echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post_data['comment_number'];
                                                 echo "<br><i class='fa fa-eye-slash' title='Privatna objava'></i> Privatna objava";
+
+                                                echo "<hr><a href='post.php?id=".$post_id."&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
                                     echo '  </div>
                                                 <div class="col-md-9 text-left">
                                                     <strong>Objavljeno: </strong>';

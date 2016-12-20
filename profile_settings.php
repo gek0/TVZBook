@@ -109,7 +109,7 @@ if($session->session_test() === true){
 		  	if($result === true){
 				echo '<script type="text/javascript">';
 				echo 'setTimeout(function () { 
-						swal("Uspjeh", "Profilno uspješno izmjenjen.", "success");
+						swal("Uspjeh", "Profil uspješno izmjenjen.", "success");
 					  }, 500);
 					  setTimeout(function () { 
 						window.location = "profile_settings.php";
@@ -120,7 +120,7 @@ if($session->session_test() === true){
 		    else{
 				echo '<script type="text/javascript">';
 				echo 'setTimeout(function () { 
-						swal("Greška", "Neki podaci nisu važeći ili poslani.", "error");
+						swal("Greška", "Neki podaci nisu važeći ili nisu poslani.", "error");
 					  }, 500);
 					  setTimeout(function () { 
 						window.location = "profile_settings.php";

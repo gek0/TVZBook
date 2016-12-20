@@ -4,6 +4,7 @@
 *					add like to post
 *					likes for single post
 *                   likes count for user
+*                   delete likes for post
 *
 */
 
@@ -94,6 +95,24 @@ class likes
             return $likes_data = array_merge($query->fetchAll());
             
         } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $post_id
+     * delete likes for post
+     */
+    public function post_likes_delete($post_id)
+    {
+        $query = $this->db->prepare("DELETE FROM `likes` WHERE `post_id` = :post_id");
+        $query->bindParam("post_id", $post_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
             die($ex->getMessage());
         }
     }
