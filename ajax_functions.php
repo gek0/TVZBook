@@ -212,6 +212,53 @@ else if($_SERVER["REQUEST_METHOD"] == 'GET' && isset($_GET['request'])){
 			}				
 		}	  
 		break;
+	  case 'delete-comment':
+	  	require_once ('inc/header.php');
+
+		if(empty($_GET["comment_id"]) || !$comments->comment_exists($_GET["comment_id"])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Komentar ne postoji.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "index.php";
+				  }, 3000);';
+			echo '</script>';
+			die;
+		}
+		else if(!$comments->is_user_comment_author($_GET["comment_id"], $_SESSION[$session_id])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Niste ovlašteni za ovu akciju.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "post.php?id='.$_GET["post_id"].'";
+				  }, 3000);';
+			echo '</script>';
+			die;			
+		}
+		else{
+			if($comments->comment_delete($_GET["comment_id"])){
+				if($posts->update_comments_num_decrement($_GET["post_id"])){
+				    echo '<script type="text/javascript">';
+				    echo 'setTimeout(function () { 
+				            swal("Uspjeh", "Vaš komentar je obrisan.", "success");
+				           }, 500);
+				            setTimeout(function () { 
+				              window.location = "post.php?id='.$_GET["post_id"].'";
+				            }, 3000);';
+				    echo '</script>';
+				    die;
+				}
+				else{
+					error_return();
+				}
+			}
+			else{
+				error_return();			
+			}				
+		}	  
+		break;		
 	default:
 	    return false;
 	}	

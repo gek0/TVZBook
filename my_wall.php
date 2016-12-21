@@ -58,18 +58,22 @@ if($session->session_test() === true){
                 </table>
                 <hr>
 
-                <a href="index.php">
-                    <button class="inverse_main" id="view-wall-button">Naslovnica <i class="fa fa-home"></i></button>
+                <a href="my_wall.php">
+                    <button class="inverse_main" id="view-wall-button">Moj zid <i class="fa fa-list-ul"></i></button>
                 </a>
                 <a href="profile.php?user=<?php echo $current_user['slug']; ?>">
                     <button class="inverse_main" id="view-wall-button">Moj profil <i class="fa fa-user"></i></button>
                 </a>                
                 <a href="profile_settings.php">
-                    <button class="inverse_main" id="view-settings-button">Uredi profil <i class="fa fa-cogs"></i></button>
+                    <button class="inverse_main" id="view-settings-button">Uredi profil <i class="fa fa-cogs fa-spin"></i></button>
                 </a>
                 <a href="index.php?logout">
-                    <button class="inverse_main" id="logout-button">Odlogiraj se <i class="fa fa-sign-out"></i></button>
+                    <button class="inverse_main" id="logout-button">Odjava <i class="fa fa-sign-out"></i></button>
                 </a>
+                <hr>
+                <a href="stats.php">
+                    <button class="inverse_main" id="stats-button">Statistika <i class="fa fa-pie-chart"></i></button>
+                </a>   
             </div>
             <div class="col-md-9 posts-section">
                 <h2 class="text-center">Lista mojih postova <?php echo "(".$posts_count[0][0].")"; ?></h2>

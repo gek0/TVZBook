@@ -338,7 +338,8 @@ $(document).ready(function() {
                     $("#notification-data").attr("class", "notification-container success-container");
                     $("#notification-data").text(response.message).fadeIn(2000);
 
-                        //is there any post before
+
+                    //is there any post before
                     if ($("div.comment-container").length){
                         var firstComment = $("div.comment-container").first(); 
                         var newComment = $(create_comment_placeholder(response.comment_data[0], response.comment_data['avatar'],
@@ -346,7 +347,7 @@ $(document).ready(function() {
                                                                         response.comment_data['full_name'], response.comment_data['slug']));
                         newComment.hide().insertBefore(firstComment).fadeIn(2000);                                                          
  
-                    } //looks like not
+                    }
                     else{
                         var commentContainer = $("div.comments-list"); 
                         var newComment = $(create_comment_placeholder(response.comment_data[0], response.comment_data['avatar'],

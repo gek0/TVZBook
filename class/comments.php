@@ -5,6 +5,9 @@
 *					add new comment
 *					get last comment
 *                   delete comments for post
+*                   check if comment exists
+*                   check if user is comment author
+*                   delete comment
 *
 */
 
@@ -19,6 +22,51 @@ class comments
 	{
 	    $this->db = $database;
 	}
+
+    /**
+     * @param $comment_id
+     * check if comment exists
+     */
+    public function comment_exists($comment_id)
+    {
+        $query = $this->db->prepare("SELECT `id` FROM `comments` WHERE `id` = :comment_id LIMIT 1");
+        $query->bindParam(":comment_id", $comment_id, PDO::PARAM_INT);
+
+        try {
+            $query->execute();
+            if ($query->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $comment_id
+     * check if user is comment author
+     */
+    public function is_user_comment_author($comment_id, $author_id)
+    {
+        $query = $this->db->prepare("SELECT `id` FROM `comments` WHERE `id` = :comment_id  AND `author_id` = :author_id LIMIT 1");
+        $query->bindParam(":comment_id", $comment_id, PDO::PARAM_INT);
+        $query->bindParam(":author_id", $author_id, PDO::PARAM_INT);
+
+        try {
+            $query->execute();
+            if ($query->rowCount() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }    
 
     /**
      * @param $userid
@@ -131,4 +179,22 @@ class comments
             die($ex->getMessage());
         }
     }
+
+    /**
+     * @param $comment_id
+     * delete comment
+     */
+    public function comment_delete($comment_id)
+    {
+        $query = $this->db->prepare("DELETE FROM `comments` WHERE `id` = :comment_id");
+        $query->bindParam("comment_id", $comment_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }
+    }    
 }

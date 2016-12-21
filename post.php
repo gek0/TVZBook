@@ -49,45 +49,88 @@ if($session->session_test() === true){
 			die;      		
     	}
 
-        // delete post
-        if(!empty($_GET['mode']) && ($_GET['mode'] == 'delete') && ($userid == $post_data['author_id'])){
-            echo '<script type="text/javascript">';
-            echo 'setTimeout(function () {
-                        swal({
-                          title: "Jeste li sigurni?",
-                          text: "Ova akcija je nepovratna!",
-                          type: "warning",
-                          showCancelButton: true,
-                          confirmButtonText: "Da, obriši.",
-                          cancelButtonText: "Ne, odustani!",
-                          confirmButtonColor: "#12bc18",
-                          cancelButtonColor: "#c60d2c"
-                            }).then(function() {
-                                setTimeout(function () { 
-                                    window.location = "ajax_functions.php?request=delete-post&post_id='.$post_id.'";
-                                }, 500);
-                            }, function(dismiss) {
-                              if (dismiss === "cancel") {
-                                swal("Odustanak", "Vaša objava je sigurna :)", "error");
-                                setTimeout(function () { 
-                                    window.location = "post.php?id='.$post_id.'";
-                                }, 2000);
-                              }
-                        });
-                  }, 500);';
-            echo '</script>';
-            die;  
+        // post and comment actions
+        if(!empty($_GET['type']) && ($_GET['type'] == 'post')){
+            if(!empty($_GET['mode']) && ($_GET['mode'] == 'delete') && ($userid == $post_data['author_id']) && $posts->post_exists($post_id)){
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () {
+                            swal({
+                              title: "Jeste li sigurni?",
+                              text: "Ova akcija je nepovratna!",
+                              type: "warning",
+                              showCancelButton: true,
+                              confirmButtonText: "Da, obriši.",
+                              cancelButtonText: "Ne, odustani!",
+                              confirmButtonColor: "#12bc18",
+                              cancelButtonColor: "#c60d2c"
+                                }).then(function() {
+                                    setTimeout(function () { 
+                                        window.location = "ajax_functions.php?request=delete-post&post_id='.$post_id.'";
+                                    }, 500);
+                                }, function(dismiss) {
+                                if (dismiss === "cancel") {
+                                   swal("Odustanak", "Vaša objava je sigurna :)", "error");
+                                   setTimeout(function () { 
+                                       window.location = "post.php?id='.$post_id.'";
+                                   }, 2000);
+                                }
+                            });
+                      }, 500);';
+                echo '</script>';
+                die;  
+            }
+            else {
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () { 
+                        swal("Greška", "Niste ovlašteni za ovu akciju ili post nije važeći.", "error");
+                      }, 500);
+                      setTimeout(function () { 
+                        window.location = "post.php?id='.$post_id.'";
+                      }, 3000);';
+                echo '</script>';
+                die;              
+            }
         }
-        else if(!empty($_GET['mode']) && ($_GET['mode'] == 'delete') && ($userid != $post_data['author_id'])){
-            echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { 
-                    swal("Greška", "Niste ovlašteni za ovu akciju.", "error");
-                  }, 500);
-                  setTimeout(function () { 
-                    window.location = "post.php?id='.$post_id.'";
-                  }, 3000);';
-            echo '</script>';
-            die;              
+        else if (!empty($_GET['type']) && ($_GET['type'] == 'comment')){
+            if(!empty($_GET['mode']) && ($_GET['mode'] == 'delete') && $comments->is_user_comment_author($_GET['comment_id'], $userid) && $comments->comment_exists($_GET['comment_id'])){
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () {
+                            swal({
+                              title: "Jeste li sigurni?",
+                              text: "Ova akcija je nepovratna!",
+                              type: "warning",
+                              showCancelButton: true,
+                              confirmButtonText: "Da, obriši.",
+                              cancelButtonText: "Ne, odustani!",
+                              confirmButtonColor: "#12bc18",
+                              cancelButtonColor: "#c60d2c"
+                                }).then(function() {
+                                    setTimeout(function () { 
+                                        window.location = "ajax_functions.php?request=delete-comment&comment_id='.$_GET['comment_id'].'&post_id='.$post_id.'";
+                                    }, 500);
+                                }, function(dismiss) {
+                                if (dismiss === "cancel") {
+                                   swal("Odustanak", "Vaš komentar je siguran :)", "error");
+                                   setTimeout(function () { 
+                                       window.location = "post.php?id='.$post_id.'";
+                                   }, 2000);
+                                }
+                            });
+                      }, 500);';
+                echo '</script>';
+                die;  
+            }            
+            else {
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () { 
+                        swal("Greška", "Niste ovlašteni za ovu akciju ili komentar nije važeći.", "error");
+                      }, 500);
+                      setTimeout(function () { 
+                        window.location = "post.php?id='.$post_id.'";
+                      }, 3000);';
+                echo '</script>';
+                die;              
+            }
         }
     }
     else{
@@ -130,7 +173,7 @@ if($session->session_test() === true){
 
                                 // author can like it  own post
                                 if($userid == $post_data["author_id"]){
-                                    echo "<hr><a href='post.php?id=".$post_id."&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
+                                    echo "<hr><a href='post.php?id=".$post_id."&amp;type=post&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
                                 }
                                 else{
                                     // has the user already liked the post
@@ -160,11 +203,11 @@ if($session->session_test() === true){
 
                                                 echo "<a href='profile.php?user=".$post_data['slug']."'>".$post_data['full_name']."</a>";
 
-                                                echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> ".$post_data['like_number']." | ";
-                                                echo "<i class='fa fa-pencil' title='Broj komentara'></i> ".$post_data['comment_number'];
+                                                echo "<br><i class='fa fa-heart' title='Broj sviđanja'></i> <span id='like-number-container'>".$post_data['like_number']."</span> | ";
+                                                echo "<i class='fa fa-pencil' title='Broj komentara'></i> <span id='comment-number-container'>".$post_data['comment_number']."</span>";
                                                 echo "<br><i class='fa fa-eye-slash' title='Privatna objava'></i> Privatna objava";
 
-                                                echo "<hr><a href='post.php?id=".$post_id."&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
+                                                echo "<hr><a href='post.php?id=".$post_id."&amp;type=post&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
                                     echo '  </div>
                                                 <div class="col-md-9 text-left">
                                                     <strong>Objavljeno: </strong>';
@@ -201,6 +244,9 @@ if($session->session_test() === true){
                                                 echo "<img class='img-responsive thumbnail-image' src='images/no_image.jpg' />";
 
                                                 echo "<a href='profile.php?user=".$comment['slug']."'>".$comment['full_name']."</a>";
+
+                                            if($comment['author_id'] == $userid)        
+                                                echo "<hr><a href='post.php?id=".$post_id."&amp;type=comment&amp;mode=delete&amp;comment_id=".$comment[0]."' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
                                 echo '  </div>
                                         <div class="col-md-9 text-left">
                                             <strong>Objavljeno: </strong>';
