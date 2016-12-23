@@ -310,4 +310,23 @@ class posts
         }
     }
 
+    /**
+     * @param $post_id
+     * @param $post_status    
+     * edit post status
+     */
+    public function post_status_edit($post_id, $post_status)
+    {
+        $query = $this->db->prepare("UPDATE `posts` SET `posts`.status = :post_status WHERE `id` = :post_id");
+        $query->bindParam("post_status", $post_status, PDO::PARAM_STR);
+        $query->bindParam("post_id", $post_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }
+    } 
 }

@@ -257,6 +257,67 @@ else if($_SERVER["REQUEST_METHOD"] == 'GET' && isset($_GET['request'])){
 			}				
 		}	  
 		break;
+	  case 'status-change':
+	  	require_once ('inc/header.php');
+	  	$post_statuses = ['public', 'private'];
+
+		if(empty($_GET["post_id"]) || !$posts->post_exists($_GET["post_id"])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Post ne postoji.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "index.php";
+				  }, 3000);';
+			echo '</script>';
+			die;
+		}
+		else if(!$posts->is_user_post_author($_GET["post_id"], $_SESSION[$session_id])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Niste ovlašteni za ovu akciju.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "post.php?id='.$_GET["post_id"].'";
+				  }, 3000);';
+			echo '</script>';
+			die;			
+		}
+		else if(empty($_GET["post_status"])){
+			echo '<script type="text/javascript">';
+			echo 'setTimeout(function () { 
+					swal("Greška", "Status objave je prazan ili nevažeći.", "error");
+				  }, 500);
+				  setTimeout(function () { 
+					window.location = "post.php?id='.$_GET["post_id"].'";
+				  }, 3000);';
+			echo '</script>';
+			die;				
+		}
+		else{
+			if($_GET['post_status'] == 'public'){
+				$post_status = 'private';
+			}
+			else{
+				$post_status = 'public';
+			}
+
+			if($posts->post_status_edit($_GET["post_id"], $post_status)){
+				echo '<script type="text/javascript">';
+			    echo 'setTimeout(function () { 
+			            swal("Uspjeh", "Status objave je promjenjen.", "success");
+			          }, 500);
+			          setTimeout(function () { 
+			            window.location = "post.php?id='.$_GET["post_id"].'";
+			           }, 3000);';
+			    echo '</script>';
+			    die; 
+			}
+			else{
+				error_return();			
+			}				
+		}	  
+		break;		
 	  case 'delete-comment':
 	  	require_once ('inc/header.php');
 

@@ -132,7 +132,7 @@ button.inverse_main,
 button.inverse_main_small,
 button.delete,
 button.edit,
-button.status-replace {
+button.status-change {
     cursor: pointer;
     display: block;
     background: #33b5e5;
@@ -196,14 +196,14 @@ button.edit:hover{
     color: #4ebf11;
 }
 
-button.status-replace {
+button.status-change {
     background: #ef7b15;
     border: 1px solid #ffffff;
     max-width: 45px;
     padding: .25em;
     display: inline-block;
 }
-button.status-replace:hover{
+button.status-change:hover{
     background: #ffffff;
     border: 1px solid #ef7b15;
     color: #ef7b15;

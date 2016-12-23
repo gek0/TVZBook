@@ -82,6 +82,37 @@ if($session->session_test() === true){
                 echo '</script>';
                 die;  
             }
+            else if(!empty($_GET['mode']) && ($_GET['mode'] == 'status-change') && ($userid == $post_data['author_id']) && $posts->post_exists($post_id)){
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () {
+                            swal({
+                              title: "Mjenjanje statusa objave",
+                              text: "Ovime mjenjate status objave iz javne u privatnu i obrnuto.",
+                              type: "warning",
+                              animation: true,
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
+                              showCancelButton: true,
+                              confirmButtonText: "Izmjeni <i class=\"fa fa-check\"></i>",
+                              cancelButtonText: "Ne, odustani!",
+                              confirmButtonColor: "#12bc18",
+                              cancelButtonColor: "#c60d2c"
+                                }).then(function() {
+                                    setTimeout(function () { 
+                                        window.location = "ajax_functions.php?request=status-change&post_id='.$post_id.'&post_status='.$post_data['status'].'";
+                                    }, 500);
+                                }, function(dismiss) {
+                                if (dismiss === "cancel") {
+                                   swal("Odustanak", "Status objave ostaje isti.", "warning");
+                                   setTimeout(function () { 
+                                       window.location = "post.php?id='.$post_id.'";
+                                   }, 2000);
+                                }
+                            });
+                      }, 500);';
+                echo '</script>';
+                die;  
+            }            
             else if(!empty($_GET['mode']) && ($_GET['mode'] == 'edit') && ($userid == $post_data['author_id']) && $posts->post_exists($post_id)){
                 echo '<script type="text/javascript">';
                 echo 'setTimeout(function () {
@@ -179,7 +210,7 @@ if($session->session_test() === true){
                                     }, 500);
                                 }, function(dismiss) {
                                 if (dismiss === "cancel") {
-                                   swal("Odustanak", "Vaš komentar je siguran :)", "error");
+                                   swal("Odustanak", "Vaš komentar je siguran :)", "warning");
                                    setTimeout(function () { 
                                        window.location = "post.php?id='.$post_id.'";
                                    }, 2000);
@@ -308,7 +339,8 @@ if($session->session_test() === true){
                                 // author can like it  own post
                                 if($userid == $post_data["author_id"]){
                                     echo "<hr><a href='post.php?id=".$post_id."&amp;type=post&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
-                                        echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=edit' title='Uređivanje'><button class='edit'><i class='fa fa-pencil'></i></button></a>";  
+                                        echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=status-change' title='Prromjena statusa'><button class='status-change'><i class='fa fa-eye-slash'></i></button></a>";                                      
+                                        echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=edit' title='Uređivanje'><button class='edit'><i class='fa fa-pencil'></i></button></a>";                                       
                                 }
                                 else{
                                     // has the user already liked the post
@@ -343,6 +375,7 @@ if($session->session_test() === true){
                                                 echo "<br><i class='fa fa-eye-slash' title='Privatna objava'></i> Privatna objava";
 
                                                 echo "<hr><a href='post.php?id=".$post_id."&amp;type=post&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
+                                                echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=status-change' title='Prromjena statusa'><button class='status-change'><i class='fa fa-eye'></i></button></a>";                                                  
                                                 echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=edit' title='Uređivanje'><button class='edit'><i class='fa fa-pencil'></i></button></a>";                                                  
                                     echo '  </div>
                                                 <div class="col-md-9 text-left">
