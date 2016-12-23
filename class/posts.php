@@ -11,6 +11,8 @@
 *                   update like count on post
 *                   delete post
 *                   check if user is post author
+*                   edit post
+?                   change post status
 *
 */
 
@@ -285,4 +287,27 @@ class posts
             die($ex->getMessage());
         }
     }
+
+    /**
+     * @param $post_id
+     * @param $post_text     
+     * edit post
+     */
+    public function post_edit($post_id, $post_text)
+    {
+        $post_text = htmlspecialchars($post_text, ENT_QUOTES, "UTF-8");
+
+        $query = $this->db->prepare("UPDATE `posts` SET `posts`.post_text = :post_text WHERE `id` = :post_id");
+        $query->bindParam("post_text", $post_text, PDO::PARAM_STR);
+        $query->bindParam("post_id", $post_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }
+    }
+
 }

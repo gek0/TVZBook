@@ -8,6 +8,7 @@
 *                   check if comment exists
 *                   check if user is comment author
 *                   delete comment
+*                   edit comment
 *
 */
 
@@ -196,5 +197,26 @@ class comments
         } catch(PDOException $ex){
             die($ex->getMessage());
         }
-    }    
+    }  
+
+    /**
+     * @param $comment_id
+     * edit comment
+     */
+    public function comment_edit($comment_id, $comment_text)
+    {
+        $comment_text = htmlspecialchars($comment_text, ENT_QUOTES, "UTF-8");
+
+        $query = $this->db->prepare("UPDATE `comments` SET `comments`.comment_text = :comment_text WHERE `id` = :comment_id");
+        $query->bindParam("comment_text", $comment_text, PDO::PARAM_STR);
+        $query->bindParam("comment_id", $comment_id, PDO::PARAM_INT);
+
+        try{
+            $query->execute();
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }
+    }  
 }

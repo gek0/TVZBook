@@ -107,7 +107,8 @@ body {
     border: 1px solid #33b5e5;
     color: #333333;
 }
-textarea{
+textarea,
+textarea.input-textarea{
     outline: none;
     display: block;
     width: 100%;
@@ -121,7 +122,8 @@ textarea{
     transition: 0.3s ease;
     resize: none;
 }
-textarea:focus{
+textarea:focus,
+textarea.input-textarea{
     border: 1px solid #33b5e5;
     color: #333333;
 }
@@ -129,7 +131,8 @@ button.main_button,
 button.inverse_main,
 button.inverse_main_small,
 button.delete,
-button.edit {
+button.edit,
+button.status-replace {
     cursor: pointer;
     display: block;
     background: #33b5e5;
@@ -191,6 +194,19 @@ button.edit:hover{
     background: #ffffff;
     border: 1px solid #4ebf11;
     color: #4ebf11;
+}
+
+button.status-replace {
+    background: #ef7b15;
+    border: 1px solid #ffffff;
+    max-width: 45px;
+    padding: .25em;
+    display: inline-block;
+}
+button.status-replace:hover{
+    background: #ffffff;
+    border: 1px solid #ef7b15;
+    color: #ef7b15;
 }
 
 button.condensed-like,

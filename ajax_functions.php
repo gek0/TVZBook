@@ -139,6 +139,51 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		    }			
 		}
 		break;
+	case 'edit-comment':
+		if(empty($_POST["post_id"]) || !$posts->post_exists($_POST["post_id"])){
+			echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	
+		}
+		else if(empty($_POST["comment_id"]) || !$comments->comment_exists($_POST["comment_id"])){
+			echo json_encode(array('status' => 1, 'message' => 'Komentar ne postoji.'));	
+		}
+		else if(!$comments->is_user_comment_author($_POST["comment_id"], $_SESSION[$session_id])){
+			echo json_encode(array('status' => 1, 'message' => 'Niste ovlašteni za ovu akciju.'));	
+		}
+		else if(empty($_POST["comment_text"])){
+			echo json_encode(array('status' => 1, 'message' => 'Komentar ne može biti prazan.'));	
+		}		
+		else{
+
+			$result = $comments->comment_edit($_POST["comment_id"], $_POST["comment_text"]);		  	
+			if($result == true){
+	 		    echo json_encode(array('status' => 0, 'message' => 'Vaš komentar je izmjenjen.'));
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
+		    }			
+		}
+		break;
+	case 'edit-post':
+		if(empty($_POST["post_id"]) || !$posts->post_exists($_POST["post_id"])){
+			echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	
+		}
+		else if(!$posts->is_user_post_author($_POST["post_id"], $_SESSION[$session_id])){
+			echo json_encode(array('status' => 1, 'message' => 'Niste ovlašteni za ovu akciju.'));	
+		}
+		else if(empty($_POST["post_text"])){
+			echo json_encode(array('status' => 1, 'message' => 'Objava ne može biti prazna.'));	
+		}		
+		else{
+
+			$result = $posts->post_edit($_POST["post_id"], $_POST["post_text"]);		  	
+			if($result == true){
+	 		    echo json_encode(array('status' => 0, 'message' => 'Vaša objava je izmjenjena.'));
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
+		    }			
+		}
+		break;
 	default:
 	    return false;
 	}

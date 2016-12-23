@@ -58,6 +58,9 @@ if($session->session_test() === true){
                               title: "Jeste li sigurni?",
                               text: "Ova akcija je nepovratna!",
                               type: "warning",
+                              animation: true,
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
                               showCancelButton: true,
                               confirmButtonText: "Da, obriši.",
                               cancelButtonText: "Ne, odustani!",
@@ -79,6 +82,69 @@ if($session->session_test() === true){
                 echo '</script>';
                 die;  
             }
+            else if(!empty($_GET['mode']) && ($_GET['mode'] == 'edit') && ($userid == $post_data['author_id']) && $posts->post_exists($post_id)){
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () {
+                            swal({
+                              title: "Izmjena objave",
+                              text: "Sadašnja objava neće biti sačuvana ako ju izmjenite.",
+                              input: "textarea",
+                              animation: true,
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
+                              showCancelButton: true,
+                              inputPlaceholder: "Na umu mi je...",
+                              inputAutoTrim: true,
+                              inputValue: "'.js_string_escape($post_data['post_text']).'",
+                              inputClass: "input-textarea",
+                              confirmButtonText: "Uredi <i class=\"fa fa-pencil\"></i>",
+                              cancelButtonText: "Ne, odustani!",
+                              confirmButtonColor: "#12bc18",
+                              cancelButtonColor: "#c60d2c"
+                                }).then(function() {
+                                    var postText = $(".swal2-textarea").val();
+                                    $.ajax({
+                                      type: "POST",
+                                      dataType: "json",
+                                      data: {
+                                        "post_text": postText,
+                                        "post_id": "'.$post_id.'",
+                                        "request": "edit-post"
+                                      },
+                                      url: "ajax_functions.php",
+                                      success: function(response, textStatus, jqXHR) {
+                                        if(response.status == 0){
+                                                swal("Uspjeh", response.message, "success");
+                                                setTimeout(function () { 
+                                                   window.location = "post.php?id='.$post_id.'";
+                                               }, 2000);
+                                        }
+                                        else{
+                                            swal("Greška", response, "warning");
+                                            setTimeout(function () { 
+                                                window.location = "post.php?id='.$post_id.'";
+                                            }, 2000);
+                                        }
+                                      },
+                                      error: function(response, textStatus, jqXHR) {
+                                           swal("Greška", response, "error");
+                                           setTimeout(function () { 
+                                               window.location = "post.php?id='.$post_id.'";
+                                           }, 2000);
+                                      }
+                                    });    
+                                }, function(dismiss) {
+                                if (dismiss === "cancel") {
+                                   swal("Odustanak", "Vaša objava je ostala nepromjenjena.", "error");
+                                   setTimeout(function () { 
+                                       window.location = "post.php?id='.$post_id.'";
+                                   }, 2000);
+                                }
+                            });
+                      }, 500);';
+                echo '</script>';
+                die;  
+            }            
             else {
                 echo '<script type="text/javascript">';
                 echo 'setTimeout(function () { 
@@ -99,8 +165,11 @@ if($session->session_test() === true){
                               title: "Jeste li sigurni?",
                               text: "Ova akcija je nepovratna!",
                               type: "warning",
+                              animation: true,
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
                               showCancelButton: true,
-                              confirmButtonText: "Da, obriši.",
+                              confirmButtonText: "Obriši <i class=\"fa fa-trash\"></i>",
                               cancelButtonText: "Ne, odustani!",
                               confirmButtonColor: "#12bc18",
                               cancelButtonColor: "#c60d2c"
@@ -119,7 +188,72 @@ if($session->session_test() === true){
                       }, 500);';
                 echo '</script>';
                 die;  
-            }            
+            }   
+            else if(!empty($_GET['mode']) && ($_GET['mode'] == 'edit') && $comments->is_user_comment_author($_GET['comment_id'], $userid) && $comments->comment_exists($_GET['comment_id']) && isset($_GET['comment_key'])){
+
+                echo '<script type="text/javascript">';
+                echo 'setTimeout(function () {
+                            swal({
+                              title: "Izmjena komentara",
+                              text: "Sadašnji komentar neće biti sačuvan ako ga izmjenite.",
+                              input: "textarea",
+                              animation: true,
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
+                              showCancelButton: true,
+                              inputPlaceholder: "Želim ti reći...",
+                              inputAutoTrim: true,
+                              inputValue: "'.$comments_data[$_GET['comment_key']]['comment_text'].'",
+                              inputClass: "input-textarea",
+                              confirmButtonText: "Uredi <i class=\"fa fa-pencil\"></i>",
+                              cancelButtonText: "Ne, odustani!",
+                              confirmButtonColor: "#12bc18",
+                              cancelButtonColor: "#c60d2c"
+                                }).then(function() {
+                                    var commentText = $(".swal2-textarea").val();
+                                    $.ajax({
+                                      type: "POST",
+                                      dataType: "json",
+                                      data: {
+                                        "comment_text": commentText,
+                                        "comment_id": "'.$_GET['comment_id'].'",
+                                        "post_id": "'.$post_id.'",
+                                        "request": "edit-comment"
+                                      },
+                                      url: "ajax_functions.php",
+                                      success: function(response, textStatus, jqXHR) {
+                                        if(response.status == 0){
+                                                swal("Uspjeh", response.message, "success");
+                                                setTimeout(function () { 
+                                                   window.location = "post.php?id='.$post_id.'";
+                                               }, 2000);
+                                        }
+                                        else{
+                                            swal("Greška", response, "warning");
+                                            setTimeout(function () { 
+                                                window.location = "post.php?id='.$post_id.'";
+                                            }, 2000);
+                                        }
+                                      },
+                                      error: function(response, textStatus, jqXHR) {
+                                           swal("Greška", response, "error");
+                                           setTimeout(function () { 
+                                               window.location = "post.php?id='.$post_id.'";
+                                           }, 2000);
+                                      }
+                                    });    
+                                }, function(dismiss) {
+                                if (dismiss === "cancel") {
+                                   swal("Odustanak", "Vaš komentar je ostao nepromjenjen.", "error");
+                                   setTimeout(function () { 
+                                       window.location = "post.php?id='.$post_id.'";
+                                   }, 2000);
+                                }
+                            });
+                      }, 500);';
+                echo '</script>';
+                die;  
+            }                     
             else {
                 echo '<script type="text/javascript">';
                 echo 'setTimeout(function () { 
@@ -174,6 +308,7 @@ if($session->session_test() === true){
                                 // author can like it  own post
                                 if($userid == $post_data["author_id"]){
                                     echo "<hr><a href='post.php?id=".$post_id."&amp;type=post&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
+                                        echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=edit' title='Uređivanje'><button class='edit'><i class='fa fa-pencil'></i></button></a>";  
                                 }
                                 else{
                                     // has the user already liked the post
@@ -208,6 +343,7 @@ if($session->session_test() === true){
                                                 echo "<br><i class='fa fa-eye-slash' title='Privatna objava'></i> Privatna objava";
 
                                                 echo "<hr><a href='post.php?id=".$post_id."&amp;type=post&amp;mode=delete' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
+                                                echo "<a href='post.php?id=".$post_id."&amp;type=post&amp;mode=edit' title='Uređivanje'><button class='edit'><i class='fa fa-pencil'></i></button></a>";                                                  
                                     echo '  </div>
                                                 <div class="col-md-9 text-left">
                                                     <strong>Objavljeno: </strong>';
@@ -235,7 +371,7 @@ if($session->session_test() === true){
                 <div class="comments-list">
                     <?php
                         if(!empty($comments_data)){
-                            foreach ($comments_data as $comment) {
+                            foreach ($comments_data as $key => $comment) {
                                 echo '<div class="row comment-container">
                                         <div class="col-md-3 right-border text-center">';
                                             if(!empty($comment['avatar']))
@@ -245,8 +381,11 @@ if($session->session_test() === true){
 
                                                 echo "<a href='profile.php?user=".$comment['slug']."'>".$comment['full_name']."</a>";
 
-                                            if($comment['author_id'] == $userid)        
+                                            if($comment['author_id'] == $userid) {       
                                                 echo "<hr><a href='post.php?id=".$post_id."&amp;type=comment&amp;mode=delete&amp;comment_id=".$comment[0]."' title='Brisanje'><button class='delete'><i class='fa fa-trash'></i></button></a>";
+                                                echo "<a href='post.php?id=".$post_id."&amp;type=comment&amp;mode=edit&amp;comment_id=".$comment[0]."&amp;comment_key=".$key."' title='Uređivanje'><button class='edit'><i class='fa fa-pencil'></i></button></a>";    
+                                            }                                        
+
                                 echo '  </div>
                                         <div class="col-md-9 text-left">
                                             <strong>Objavljeno: </strong>';

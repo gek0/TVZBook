@@ -138,4 +138,17 @@ function drop_empty($variable){
   return ($var === '') ? NULL : $var;
 }
 
+/**
+ * @param $string
+ * @return escaped string
+ * escape string from control chars for javascript parser
+ */
+function js_string_escape($string){
+    $patterns = array("/\\\\/", '/\n/', '/\r/', '/\t/', '/\v/', '/\f/');
+    $replacements = array('\\\\\\', '\n', '\r', '\t', '\v', '\f');
+    $escaped_string = preg_replace($patterns, $replacements, $string);
+
+    return $escaped_string;
+}
+
 ?>
