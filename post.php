@@ -345,7 +345,7 @@ if($session->session_test() === true){
                                 else{
                                     // has the user already liked the post
                                     if(array_search($userid, $users_liked)){
-                                        echo "<hr><button class='inverse_main condensed-like-disabled' title='Već ti se sviđa objava' disabled><i class='fa fa-heart'></i></button>";
+                                        echo "<hr><button class='inverse_main condensed-like' title='Ne sviđa mi se objava' id='remove-like-button' data-value='".$post_id."' data-request-type='post-like-remove'><i class='fa fa-heart-o'></i></button>";
                                     }
                                     else{
                                         echo "<hr><button class='inverse_main condensed-like' title='Sviđa mi se ova objava' id='give-like-button' data-value='".$post_id."' data-request-type='post-like'><i class='fa fa-heart'></i></button>";

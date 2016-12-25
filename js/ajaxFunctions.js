@@ -412,9 +412,62 @@ $(document).ready(function() {
                     $("#notification-data").attr("class", "notification-container success-container");
                     $("#notification-data").text(response.message).fadeIn(2000);
 
-                    $("#give-like-button").prop("disabled", true);
-                    $("#give-like-button").attr("title", "Već ti se sviđa objava");
+                    $("#give-like-button").attr("title", "Ne sviđa mi se objava");                    
+                    $("#give-like-button").attr("id", "remove-like-button");                    
+                    $("#remove-like-button").html("<i class='fa fa-heart-o'></i>");
                     $("#like-number-container").text(numberOfLikes + 1);
+
+                    setTimeout(function(){
+                        $("#notification-data").attr("class", "notification-container");
+                        $("#notification-data").empty();
+                    }, 3000);
+                }
+                else{
+                    $("#notification-data").attr("class", "notification-container failure-container");
+                    $("#notification-data").text(response.message).fadeIn(2000);
+
+                    setTimeout(function(){
+                        $("#notification-data").attr("class", "notification-container");
+                        $("#notification-data").empty();
+                    }, 3000);
+                }
+            },
+            error: function(response, textStatus, jqXHR) {
+                $("#notification-data").attr("class", "notification-container failure-container");
+                $("#notification-data").text("Dogodila se greška. Pokušajte kasnije.").fadeIn(2000);
+                console.log(response);
+
+                setTimeout(function(){
+                    $("#notification-data").attr("class", "notification-container");
+                    $("#notification-data").empty();
+                }, 3000);
+            }
+        });
+    }
+
+    /**
+     *  remove like from post
+     */
+    function remove_like(postID, request){
+        $.ajax({
+            type: 'POST',
+            url: 'ajax_functions.php',
+            dataType: 'json',
+            data: {
+                post_id: postID,
+                request: request
+            },
+            success: function(response, textStatus, jqXHR) {
+                if(response.status == 0){
+                    var likesNumber = $("#like-number-container").text();
+                    var numberOfLikes = parseInt(likesNumber);
+                    $("#notification-data").attr("class", "notification-container success-container");
+                    $("#notification-data").text(response.message).fadeIn(2000);
+
+                    $("#remove-like-button").attr("title", "Sviđa mi se objava");
+                    $("#remove-like-button").attr("id", "give-like-button");
+                    $("#give-like-button").html("<i class='fa fa-heart'></i>");
+                    $("#like-number-container").text(numberOfLikes - 1);
 
                     setTimeout(function(){
                         $("#notification-data").attr("class", "notification-container");
@@ -507,5 +560,16 @@ $(document).ready(function() {
         var postID = $(this).attr("data-value");
         var request = $(this).attr("data-request-type");
         add_like(postID, request);
-    });    
+    });   
+
+    /**
+     *  remove like
+     */
+    $("#remove-like-button").click(function(e) {
+        e.preventDefault();
+
+        var postID = $(this).attr("data-value");
+        var request = $(this).attr("data-request-type");
+        remove_like(postID, request);
+    });     
 });

@@ -7,8 +7,10 @@
 *                   get post
 *                   check if post exists
 *                   post count for certain user
-*                   update comment count on post
-*                   update like count on post
+*                   update comment count on post - increment
+*                   update comment count on post - decrement
+*                   update like count on post - increment
+*                   update like count on post - decrement
 *                   delete post
 *                   check if user is post author
 *                   edit post
@@ -250,6 +252,25 @@ class posts
             die($ex->getMessage());
         }       
     }    
+
+    /**
+     * @param $post_id
+     * update like counter for post - increment
+     */
+    public function update_likes_num_decrement($post_id)
+    {
+        $query = $this->db->prepare("UPDATE `posts` SET `like_number` = `like_number` - 1 WHERE `id` = :post_id");
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+
+        try {       
+            $query->execute();
+
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        }       
+    }
 
     /**
      * @param $post_id

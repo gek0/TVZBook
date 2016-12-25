@@ -5,6 +5,7 @@
 *					likes for single post
 *                   likes count for user
 *                   delete likes for post
+*                   remove like from post
 *
 */
 
@@ -60,6 +61,27 @@ class likes
             die($ex->getMessage());
         } 
 	}
+
+    /**
+     * @param $users_list
+     * @param $post_id
+     *  remove like from post
+     */
+    public function remove_like($users_list, $post_id) 
+    {
+        $query = $this->db->prepare("UPDATE `likes` SET `users_list` = :users_list WHERE `post_id` = :post_id");
+        $query->bindParam(":users_list", $users_list, PDO::PARAM_STR);
+        $query->bindParam(":post_id", $post_id, PDO::PARAM_INT);
+
+        try {
+            $query->execute();
+
+            return true;
+
+        } catch(PDOException $ex){
+            die($ex->getMessage());
+        } 
+    }    
 
     /**
      * @param $post_id

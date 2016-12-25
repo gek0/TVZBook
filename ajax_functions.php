@@ -139,6 +139,38 @@ if($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['request'])){
 		    }			
 		}
 		break;
+	case 'post-like-remove':
+		if(empty($_POST["post_id"]) || !$posts->post_exists($_POST["post_id"])){
+			echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	
+		}
+		else{
+			$user_id = " ".$_SESSION[$session_id]; // format users divided by space
+			$post_id = (int)$_POST["post_id"];
+
+            $likes_data = array_merge($likes->get_likes($post_id));
+            $users_liked = explode(" ", $likes_data[0]["users_list"]);
+            $users_liked_new = implode(' ', $users_liked);
+
+			$pos = strpos($users_liked_new, $user_id);
+			if ($pos !== false) {
+			    $new_users_list = substr_replace($users_liked_new, '', $pos, strlen($user_id));
+			}
+
+			$result = $likes->remove_like($new_users_list, $post_id);
+		  	if($result == true){
+		  		//update likes number if all ok
+            	if($posts->update_likes_num_decrement($post_id)){
+	 		    	echo json_encode(array('status' => 0, 'message' => 'Tvoje sviđanje objave je uklonjeno.'));           		
+            	}
+				else{
+					echo json_encode(array('status' => 1, 'message' => 'Dogodila se greška.'));	
+				}
+		    }
+		    else{
+				echo json_encode(array('status' => 1, 'message' => 'Neki od podatka nisu važeći ili poslani.'));
+		    }			
+		}
+		break;
 	case 'edit-comment':
 		if(empty($_POST["post_id"]) || !$posts->post_exists($_POST["post_id"])){
 			echo json_encode(array('status' => 1, 'message' => 'Post ne postoji.'));	
