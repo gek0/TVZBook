@@ -9,7 +9,7 @@
 *                   check if user is comment author
 *                   delete comment
 *                   edit comment
-*
+*                   count all comments
 */
 
 class comments
@@ -218,5 +218,28 @@ class comments
         } catch(PDOException $ex){
             die($ex->getMessage());
         }
-    }  
+    } 
+
+    /**
+     * @param NULL
+     * get comments count
+     */
+    public function comment_count_site()
+    {
+        $query = $this->db->prepare("SELECT COUNT(*) AS `num_of_comments` FROM `comments`");
+        
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $comments_count = $query->fetchAll();
+            } 
+            else {
+                return false;
+            }
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
 }

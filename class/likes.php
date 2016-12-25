@@ -6,7 +6,7 @@
 *                   likes count for user
 *                   delete likes for post
 *                   remove like from post
-*
+*                   count all likes
 */
 
 class likes
@@ -138,4 +138,22 @@ class likes
             die($ex->getMessage());
         }
     }
+
+    /**
+     * @param NULL
+     *  get all likes
+     */
+    public function count_likes() 
+    {
+        $query = $this->db->prepare("SELECT * FROM `likes`");
+        
+        try {       
+            $query->execute();
+
+            return $likes_data = array_merge($query->fetchAll());
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }    
 }

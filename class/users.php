@@ -1,14 +1,17 @@
 <?php
 /**
-*   users class:      login
-*                     register
-*                     get current user data
-*                     get single user data
-*                     check if users exist by username
-*                     check if users exist by slug
-*                     update login time
-*                     change user credentials
-*                     logout
+*   users class:        login
+*                       register
+*                       get current user data
+*                       get single user data
+*                       check if users exist by username
+*                       check if users exist by slug
+*                       update login time
+*                       change user credentials
+*                       logout
+*                       get users count
+*                       get first registration date
+*                       get last registration date                       
 */
 
 class users
@@ -121,7 +124,6 @@ class users
             die($ex->getMessage());
         }
     }
-
 
     /**
      * @param $id
@@ -292,7 +294,80 @@ class users
 		session_destroy();
 		header("Location: ");
 		exit();
-	}	
-}
+	}
 
-?>
+    /**
+     * @param NULL
+     * count all users
+     */
+    public function users_count()
+    {
+        $query = $this->db->prepare("SELECT COUNT(*) AS `num_of_users` FROM `users`");
+        
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $users_count = $query->fetchAll();
+            } 
+            else {
+                return false;
+            }
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param NULL
+     * get first user registred date
+     */
+    public function get_first_registred_user()
+    {
+        $query = $this->db->prepare("SELECT `registration_date` FROM `users` ORDER BY `id` ASC LIMIT 1");
+        
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $user_data = $query->fetchAll();
+            } 
+            else 
+            {
+                return false;
+            }
+            
+        } 
+        catch(PDOException $ex)
+        {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param NULL
+     * get last user registred data
+     */
+    public function get_last_registred_user()
+    {
+        $query = $this->db->prepare("SELECT `registration_date` FROM `users` ORDER BY `id` DESC LIMIT 1");
+        
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $user_data = $query->fetchAll();
+            } 
+            else 
+            {
+                return false;
+            }
+            
+        } 
+        catch(PDOException $ex)
+        {
+            die($ex->getMessage());
+        }
+    }
+}

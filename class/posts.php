@@ -15,7 +15,8 @@
 *                   check if user is post author
 *                   edit post
 ?                   change post status
-*
+*                   count all posts
+*                   count all posts by status
 */
 
 class posts
@@ -350,4 +351,52 @@ class posts
             die($ex->getMessage());
         }
     } 
+
+    /**
+     * @param NULL
+     * get post count on site
+     */
+    public function post_count_site()
+    {
+        $query = $this->db->prepare("SELECT COUNT(*) AS `num_of_posts` FROM `posts`");
+        
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $posts_count = $query->fetchAll();
+            } 
+            else {
+                return false;
+            }
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param $post_status
+     * get post count on site by status
+     */
+    public function post_count_site_by_status($post_status)
+    {
+
+        $query = $this->db->prepare("SELECT COUNT(*) AS `num_of_posts` FROM `posts` WHERE `status` = :post_status");
+        $query->bindParam("post_status", $post_status, PDO::PARAM_STR);
+
+        try {       
+            $query->execute();
+
+            if($query->rowCount() == 1) {
+                return $posts_count = $query->fetchAll();
+            } 
+            else {
+                return false;
+            }
+            
+        } catch(PDOException $ex) {
+            die($ex->getMessage());
+        }
+    }
 }
