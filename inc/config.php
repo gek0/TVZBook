@@ -4,8 +4,8 @@
 */
 
 $dbhost = "localhost";
-$dbuser = "root";
-$dbpass = "zezancija";
+$dbuser = "";
+$dbpass = "";
 $dbname = "tvzbook";
 
 session_start();
